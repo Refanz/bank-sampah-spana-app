@@ -16,8 +16,21 @@
         android:theme="@style/Theme.Spana"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ui.view.activity.TrashAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Spana.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
