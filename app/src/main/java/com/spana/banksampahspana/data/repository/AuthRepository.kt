@@ -5,7 +5,6 @@ import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.model.User
-import com.spana.banksampahspana.data.remote.response.Errors
 import com.spana.banksampahspana.data.remote.response.Response
 import com.spana.banksampahspana.data.remote.retrofit.ApiService
 import retrofit2.HttpException

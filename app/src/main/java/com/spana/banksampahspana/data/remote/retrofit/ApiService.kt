@@ -3,6 +3,7 @@ package com.spana.banksampahspana.data.remote.retrofit
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryResponse
+import com.spana.banksampahspana.data.remote.response.TrashResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -36,4 +37,14 @@ interface ApiService {
 
     @GET("trash-categories")
     suspend fun getTrashCategory(): Response<TrashCategoryResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("trashes")
+    suspend fun addNewTrash(
+        @Field("trash_type") trashType: String,
+        @Field("weight") weight: Double,
+        @Field("total_deposit") totalDeposit: Int,
+        @Field("user_id") userId: Int
+    ): Response<TrashResponse>
 }

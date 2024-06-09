@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.spana.banksampahspana.data.Result
+import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.databinding.ActivityLoginBinding
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
@@ -51,7 +52,17 @@ class LoginActivity : AppCompatActivity() {
 
                     is Result.Success -> {
                         showLoading(false)
+
+                        val userResult = result.data.user
+                        val user = User(
+                            id = userResult.id,
+                            name = userResult.name,
+                            email = userResult.email,
+                            role = userResult.role,
+                        )
+
                         authViewModel.saveAuthToken(result.data.accessToken)
+                        authViewModel.saveAuthUser(user)
 
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)

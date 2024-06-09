@@ -19,7 +19,8 @@ class ViewModelFactory private constructor(private val mApplication: Application
 
         if (modelClass.isAssignableFrom(TrashViewModel::class.java)) {
             return TrashViewModel(
-                Injection.provideTrashCategoryRepository()
+                Injection.provideTrashCategoryRepository(),
+                Injection.provideTrashRepository()
             ) as T
         }
 

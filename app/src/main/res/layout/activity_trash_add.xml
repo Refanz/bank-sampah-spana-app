@@ -81,6 +81,8 @@
                 android:layout_marginTop="10dp"
                 android:hint="Berat (kg)"
                 app:endIconMode="clear_text"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toStartOf="@id/input_layout_trash_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_weight">
 
@@ -88,6 +90,27 @@
                     android:id="@+id/input_weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_layout_trash_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="10dp"
+                android:hint="Harga per kg"
+                app:endIconMode="clear_text"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/input_layout_weight"
+                app:layout_constraintTop_toBottomOf="@id/txt_weight">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_trash_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,22 +130,33 @@
                 android:id="@+id/txt_total_price_val"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="10dp"
                 android:text="Rp.0"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_total_price" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_add_trash"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txt_total_price_val" />
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add_trash"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button1"
                 android:layout_marginHorizontal="12dp"
                 android:layout_marginTop="25dp"
+                android:background="@drawable/button1"
                 android:text="Tambah Sampah"
-                app:layout_constraintTop_toBottomOf="@id/txt_total_price_val" />
+                app:layout_constraintTop_toBottomOf="@id/progress_bar_add_trash" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

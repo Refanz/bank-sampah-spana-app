@@ -6,6 +6,7 @@ import com.spana.banksampahspana.data.local.dataStore
 import com.spana.banksampahspana.data.remote.retrofit.ApiConfig
 import com.spana.banksampahspana.data.repository.AuthRepository
 import com.spana.banksampahspana.data.repository.TrashCategoryRepository
+import com.spana.banksampahspana.data.repository.TrashRepository
 
 object Injection {
 
@@ -21,5 +22,10 @@ object Injection {
     fun provideTrashCategoryRepository(): TrashCategoryRepository {
         val apiService = ApiConfig.getApiService()
         return TrashCategoryRepository.getInstance(apiService)
+    }
+
+    fun provideTrashRepository(): TrashRepository {
+        val apiService = ApiConfig.getApiService()
+        return TrashRepository.getInstance(apiService)
     }
 }

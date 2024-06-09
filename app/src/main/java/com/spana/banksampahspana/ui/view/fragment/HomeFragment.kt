@@ -46,6 +46,10 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+        authViewModel.getAuthUser().observe(viewLifecycleOwner) { user ->
+            binding?.txtUser?.text = "Hai, ${user.name}"
+        }
+
         initRecyclerView()
 
         trashViewModel.getTrashCategory().observe(viewLifecycleOwner) { result ->
