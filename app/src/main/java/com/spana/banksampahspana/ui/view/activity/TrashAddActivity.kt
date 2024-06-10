@@ -56,8 +56,6 @@ class TrashAddActivity : AppCompatActivity() {
     }
 
     private fun addNewTrash() {
-        authViewModel.getAuthUser()
-
         val trashType = binding?.inputTrashCategory?.text?.split("/")?.first().toString()
         val weight = binding?.inputWeight?.text.toString().toDouble()
         val totalDeposit = binding?.txtTotalPriceVal?.text?.split(".")?.last()?.toInt() ?: 0
@@ -65,7 +63,7 @@ class TrashAddActivity : AppCompatActivity() {
         authViewModel.getAuthUser().observe(this) { user ->
 
             val trash = Trash(
-                totalDeposit, trashType, weight, user.id
+                totalDeposit, trashType, weight, user.id, ""
             )
 
             trashViewModel.addNewTrash(trash).observe(this) { result ->

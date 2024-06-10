@@ -1,60 +1,81 @@
 package com.spana.banksampahspana.ui.view.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.spana.banksampahspana.R
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.spana.banksampahspana.data.Result
+import com.spana.banksampahspana.data.remote.response.Trash
+import com.spana.banksampahspana.databinding.FragmentTrashHistoryBinding
+import com.spana.banksampahspana.ui.adapter.TrashAdapter
+import com.spana.banksampahspana.ui.viewmodel.TrashViewModel
+import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TrashHistoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TrashHistoryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentTrashHistoryBinding? = null
+    private val binding get() = _binding
+
+    private lateinit var trashViewModel: TrashViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_trash_history, container, false)
+        _binding = FragmentTrashHistoryBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TrashHistoryFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TrashHistoryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        trashViewModel = obtainTrashViewModel(requireContext() as AppCompatActivity)
+
+
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView() {
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding?.rvTrashes?.layoutManager = layoutManager
+
+        trashViewModel.getUserTrash().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+
+                is Result.Success -> {
+                    showLoading(false)
+
+                    val adapter = TrashAdapter(result.data?.data as ArrayList<Trash>)
+                    binding?.rvTrashes?.adapter = adapter
+                }
+
+                is Result.Error -> {
+                    showLoading(false)
+                    Toast.makeText(requireContext(), result.error, Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding?.progressBarTrash?.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainTrashViewModel(activity: AppCompatActivity): TrashViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[TrashViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

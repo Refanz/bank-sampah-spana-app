@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     private fun setHomeFragment() {
         val fragmentManager = supportFragmentManager
         val homeFragment = HomeFragment()
-        val fragment = fragmentManager.findFragmentByTag(homeFragment::class.java.simpleName)
+        val fragment = fragmentManager.findFragmentByTag(HomeFragment::class.java.simpleName)
 
         if (fragment !is HomeFragment) {
             fragmentManager.beginTransaction().apply {

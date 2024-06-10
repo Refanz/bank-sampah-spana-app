@@ -3,11 +3,9 @@ package com.spana.banksampahspana.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.spana.banksampahspana.data.local.AuthPreferences
 import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.data.repository.AuthRepository
-import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val authRepository: AuthRepository,
@@ -18,17 +16,9 @@ class AuthViewModel(
 
     fun register(user: User) = authRepository.register(user)
 
-    fun saveAuthToken(token: String) {
-        viewModelScope.launch {
-            authPreferences.saveAuthToken(token)
-        }
-    }
+    fun logout() = authRepository.logout()
 
-    fun saveAuthUser(user: User) {
-        viewModelScope.launch {
-            authPreferences.saveAuthUser(user)
-        }
-    }
+    fun getUserInfo() = authRepository.getUserInfo()
 
     fun getAuthUser(): LiveData<User> = authPreferences.getAuthUser().asLiveData()
 

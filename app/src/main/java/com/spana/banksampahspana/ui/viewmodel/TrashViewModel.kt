@@ -13,4 +13,6 @@ class TrashViewModel(
     fun getTrashCategory() = trashCategoryRepository.getTrashCategories()
 
     fun addNewTrash(trash: Trash) = trashRepository.addNewTrash(trash)
+
+    fun getUserTrash() = trashRepository.getUserTrash()
 }

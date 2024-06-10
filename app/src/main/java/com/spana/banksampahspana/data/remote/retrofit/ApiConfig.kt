@@ -10,15 +10,14 @@ class ApiConfig {
         fun getApiService(): ApiService {
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-            val client = OkHttpClient.Builder().apply {
-                addInterceptor(loggingInterceptor)
-            }.build()
-
-            val retrofit = Retrofit.Builder().apply {
-                baseUrl("https://api.bank-sampah-spana.com/api/")
-                addConverterFactory(GsonConverterFactory.create())
-                client(client)
-            }.build()
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://api.bank-sampah-spana.com/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
 
             return retrofit.create(ApiService::class.java)
         }

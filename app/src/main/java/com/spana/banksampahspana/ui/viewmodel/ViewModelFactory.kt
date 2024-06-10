@@ -12,15 +12,15 @@ class ViewModelFactory private constructor(private val mApplication: Application
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
             return AuthViewModel(
-                Injection.provideAuthRepository(),
+                Injection.provideAuthRepository(mApplication),
                 Injection.provideAuthPreferences(mApplication)
             ) as T
         }
 
         if (modelClass.isAssignableFrom(TrashViewModel::class.java)) {
             return TrashViewModel(
-                Injection.provideTrashCategoryRepository(),
-                Injection.provideTrashRepository()
+                Injection.provideTrashCategoryRepository(mApplication),
+                Injection.provideTrashRepository(mApplication)
             ) as T
         }
 

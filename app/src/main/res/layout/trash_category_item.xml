@@ -8,8 +8,7 @@
     app:cardElevation="5dp"
     app:contentPadding="10dp"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/txt_welcome_user">
+    app:layout_constraintStart_toStartOf="parent">
 
     <LinearLayout
         android:layout_width="match_parent"
