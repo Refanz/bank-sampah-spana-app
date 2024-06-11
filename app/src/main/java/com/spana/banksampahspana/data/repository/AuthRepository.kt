@@ -120,6 +120,35 @@ class AuthRepository private constructor(
 
     }
 
+    fun updateUserInfo(user: User) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+
+            val response = apiService.updateUserInfo(
+                name = user.name,
+                email = user.email,
+                nis = user.nis,
+                phone = user.phone,
+                gender = user.gender,
+                paymentMethod = user.paymentMethod,
+                studentClass = user.studentClass,
+                authorization = "Bearer $token"
+            )
+
+            if (response.isSuccessful) {
+                emit(Result.Success(response.body()))
+            } else {
+                emit(Result.Error(response.errorBody().toString()))
+            }
+
+        } catch (e: HttpException) {
+            Log.e(TAG, e.message())
+            emit(Result.Error(e.message()))
+        }
+    }
+
     companion object {
         private const val TAG = "AuthRepository"
 

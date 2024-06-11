@@ -5,6 +5,7 @@ import com.spana.banksampahspana.data.remote.response.LogoutResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryResponse
 import com.spana.banksampahspana.data.remote.response.TrashResponse
+import com.spana.banksampahspana.data.remote.response.UpdateUserInfoResponse
 import com.spana.banksampahspana.data.remote.response.UserResponse
 import com.spana.banksampahspana.data.remote.response.UserTrashResponse
 import retrofit2.Response
@@ -14,6 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface ApiService {
 
@@ -39,6 +41,11 @@ interface ApiService {
         @Field("phone") phone: String
     ): Response<RegisterResponse>
 
+
+    @Headers("Accept: application/json")
+    @POST("logout")
+    suspend fun logout(@Header("Authorization") authorization: String): Response<LogoutResponse>
+
     @GET("trash-categories")
     suspend fun getTrashCategory(): Response<TrashCategoryResponse>
 
@@ -52,17 +59,26 @@ interface ApiService {
         @Field("user_id") userId: Int
     ): Response<TrashResponse>
 
-    @Headers("Accept: application/json")
-    @GET("user")
-    suspend fun getUserInfo(@Header("Authorization") authorization: String): Response<UserResponse>
-
-
     @Headers("Accept: application/json", "Content-Type: application/json")
     @GET("trashes/user")
     suspend fun getUserTrash(@Header("Authorization") authorization: String): Response<UserTrashResponse>
 
 
     @Headers("Accept: application/json")
-    @POST("logout")
-    suspend fun logout(@Header("Authorization") authorization: String): Response<LogoutResponse>
+    @GET("user")
+    suspend fun getUserInfo(@Header("Authorization") authorization: String): Response<UserResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("user")
+    suspend fun updateUserInfo(
+        @Header("Authorization") authorization: String,
+        @Field("email") email: String,
+        @Field("name") name: String,
+        @Field("nis") nis: String,
+        @Field("class") studentClass: Int,
+        @Field("gender") gender: String,
+        @Field("payment_method") paymentMethod: String,
+        @Field("phone") phone: String
+    ): Response<UpdateUserInfoResponse>
 }

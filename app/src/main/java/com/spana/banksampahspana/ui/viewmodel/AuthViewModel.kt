@@ -23,4 +23,6 @@ class AuthViewModel(
     fun getAuthUser(): LiveData<User> = authPreferences.getAuthUser().asLiveData()
 
     fun getAuthToken(): LiveData<String> = authPreferences.getAuthToken().asLiveData()
+
+    fun updateUserInfo(user: User) = authRepository.updateUserInfo(user);
 }

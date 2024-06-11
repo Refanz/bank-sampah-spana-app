@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.spana.banksampahspana.data.Result
+import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.databinding.FragmentProfileBinding
 import com.spana.banksampahspana.ui.view.activity.WelcomeActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
@@ -48,32 +49,8 @@ class ProfileFragment : Fragment() {
             showDialogLogout()
         }
 
-        authViewModel.getUserInfo().observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Result.Loading -> {
-                    showLoading(true)
-                }
-
-                is Result.Success -> {
-                    showLoading(false)
-
-                    val user = result.data?.user
-
-                    binding?.inputProfileName?.text = user?.name?.toEditable()
-                    binding?.inputProfileEmail?.text = user?.email?.toEditable()
-                    binding?.inputProfileNis?.text = user?.userDetail?.nis?.toEditable()
-                    binding?.inputProfileClass?.text =
-                        user?.userDetail?.userClass?.toString()?.toEditable()
-                    binding?.inputProfilePhone?.text = user?.userDetail?.phone?.toEditable()
-                    binding?.inputProfilePayment?.setText(user?.userDetail?.paymentMethod, false)
-                    binding?.inputProfileGender?.setText(user?.userDetail?.gender, false)
-                }
-
-                is Result.Error -> {
-                    showLoading(false)
-                    showToast(result.error)
-                }
-            }
+        binding?.btnSaveEditProfile?.setOnClickListener {
+            updateUserInfo()
         }
     }
 
@@ -107,8 +84,101 @@ class ProfileFragment : Fragment() {
         }.show()
     }
 
-    private fun setProfile() {
+    private fun updateUserInfo() {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle("Update User Info")
+            setMessage("Anda ingin mengubah data?")
+            setNegativeButton("Tidak") { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton("Ya") { _, _ ->
 
+                val name = binding?.inputProfileName?.text.toString()
+                val email = binding?.inputProfileEmail?.text.toString()
+                val nis = binding?.inputProfileNis?.text.toString()
+                val userClass = binding?.inputProfileClass?.text.toString().toInt()
+                val phone = binding?.inputProfilePhone?.text.toString()
+                val paymentMethod = binding?.inputProfilePayment?.text.toString()
+                val gender = binding?.inputProfileGender?.text.toString()
+
+                val user = User(
+                    name = name,
+                    email = email,
+                    nis = nis,
+                    studentClass = userClass,
+                    phone = phone,
+                    paymentMethod = paymentMethod,
+                    gender = gender
+                )
+
+                authViewModel.updateUserInfo(user).observe(viewLifecycleOwner) { result ->
+                    when (result) {
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
+
+                        is Result.Success -> {
+                            authViewModel.logout().observe(viewLifecycleOwner) { result ->
+                                when (result) {
+                                    is Result.Loading -> {}
+
+                                    is Result.Success -> {
+                                        showLoading(false)
+
+                                        val intent =
+                                            Intent(requireActivity(), WelcomeActivity::class.java)
+                                        startActivity(intent)
+
+                                        requireActivity().finish()
+                                    }
+
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                    }
+                                }
+                            }
+                        }
+
+                        is Result.Error -> {
+                            showLoading(false)
+                        }
+                    }
+                }
+
+
+            }
+
+        }.show()
+    }
+
+    private fun setProfile() {
+        authViewModel.getUserInfo().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+
+                is Result.Success -> {
+                    showLoading(false)
+
+                    val user = result.data?.user
+
+                    binding?.inputProfileName?.text = user?.name?.toEditable()
+                    binding?.inputProfileEmail?.text = user?.email?.toEditable()
+                    binding?.inputProfileNis?.text = user?.userDetail?.nis?.toEditable()
+                    binding?.inputProfileClass?.text =
+                        user?.userDetail?.userClass?.toString()?.toEditable()
+                    binding?.inputProfilePhone?.text = user?.userDetail?.phone?.toEditable()
+                    binding?.inputProfilePayment?.setText(user?.userDetail?.paymentMethod, false)
+                    binding?.inputProfileGender?.setText(user?.userDetail?.gender, false)
+                }
+
+                is Result.Error -> {
+                    showLoading(false)
+                    showToast(result.error)
+                }
+            }
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {
