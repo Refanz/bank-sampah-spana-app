@@ -25,7 +25,7 @@
                 android:minHeight="?attr/actionBarSize"
                 app:menu="@menu/top_app_bar_menu"
                 app:navigationIcon="@drawable/ic_trash"
-                app:title="SPANA" />
+                app:title="@string/app_name" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

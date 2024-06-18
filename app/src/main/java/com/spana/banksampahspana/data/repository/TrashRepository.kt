@@ -17,11 +17,14 @@ class TrashRepository private constructor(
         emit(Result.Loading)
 
         try {
+            val token = authPreferences.getAuthToken().first()
+
             val response = apiService.addNewTrash(
                 trash.trashType,
                 trash.weight,
                 trash.totalDeposit,
-                trash.id
+                trash.id,
+                "Bearer $token"
             )
 
             if (response.isSuccessful) {

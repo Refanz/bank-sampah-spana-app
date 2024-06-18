@@ -29,6 +29,11 @@ class LoginActivity : AppCompatActivity() {
         binding?.btnLogin?.setOnClickListener {
             checkFields()
         }
+
+        binding?.txtNewUser?.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initBinding() {

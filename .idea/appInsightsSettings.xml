@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.spana.banksampahspana" />
+                  <option name="mobileSdkAppId" value="1:171065923464:android:0f2cf8655afac275d9cc3d" />
+                  <option name="projectId" value="e-cycle-25ac7" />
+                  <option name="projectNumber" value="171065923464" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

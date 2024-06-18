@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Spana</string>
+    <string name="app_name">E-cycle</string>
     <string name="txt_btn_register">Registrasi</string>
     <string name="txt_welcome">Selamat Datang!</string>
     <string name="txt_btn_login">Login</string>
     <string name="txt_login">Login</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="tab_text_1">Riwayat Pemasukkan</string>
+    <string name="tab_text_2">Riwayat Penarikan</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

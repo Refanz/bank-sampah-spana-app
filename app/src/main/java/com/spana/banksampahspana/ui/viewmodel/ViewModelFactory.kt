@@ -24,6 +24,12 @@ class ViewModelFactory private constructor(private val mApplication: Application
             ) as T
         }
 
+        if (modelClass.isAssignableFrom(WithdrawalViewModel::class.java)) {
+            return WithdrawalViewModel(
+                Injection.provideWithdrawalRepository(mApplication)
+            ) as T
+        }
+
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 
