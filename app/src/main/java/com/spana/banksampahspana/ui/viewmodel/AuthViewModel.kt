@@ -16,7 +16,7 @@ class AuthViewModel(
 
     fun register(user: User) = authRepository.register(user)
 
-    fun logout() = authRepository.logout()
+    fun userLogout() = authRepository.userLogout()
 
     fun getUserInfo() = authRepository.getUserInfo()
 
@@ -24,5 +24,11 @@ class AuthViewModel(
 
     fun getAuthToken(): LiveData<String> = authPreferences.getAuthToken().asLiveData()
 
-    fun updateUserInfo(user: User) = authRepository.updateUserInfo(user);
+    fun updateUserInfo(user: User) = authRepository.updateUserInfo(user)
+
+    fun getUsers() = authRepository.getUsers()
+
+    fun getAdminInfo() = authRepository.getAdminInfo()
+
+    fun adminLogout() = authRepository.adminLogout()
 }

@@ -16,6 +16,15 @@
         android:theme="@style/Theme.Spana"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.activity.TrashCategoryAddActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.TrashAddAdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.AdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.activity.WithdrawalHistoryActivity"
             android:exported="false" />
         <activity

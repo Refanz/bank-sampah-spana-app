@@ -16,8 +16,8 @@ import com.spana.banksampahspana.data.remote.response.TrashCategoryItem
 import com.spana.banksampahspana.databinding.FragmentHomeBinding
 import com.spana.banksampahspana.databinding.WithdrawalDialogViewBinding
 import com.spana.banksampahspana.ui.adapter.TrashCategoryAdapter
-import com.spana.banksampahspana.ui.view.activity.WithdrawalHistoryActivity
 import com.spana.banksampahspana.ui.view.activity.TrashAddActivity
+import com.spana.banksampahspana.ui.view.activity.WithdrawalHistoryActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.TrashViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory

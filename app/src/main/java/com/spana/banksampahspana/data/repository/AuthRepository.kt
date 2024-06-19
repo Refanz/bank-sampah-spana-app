@@ -97,12 +97,12 @@ class AuthRepository private constructor(
         }
     }
 
-    fun logout() = liveData {
+    fun userLogout() = liveData {
         emit(Result.Loading)
 
         try {
             val token = authPreferences.getAuthToken().first()
-            val response = apiService.logout("Bearer $token")
+            val response = apiService.userLogout("Bearer $token")
 
             if (response.isSuccessful) {
                 authPreferences.removeAuthUser()
@@ -141,6 +141,64 @@ class AuthRepository private constructor(
                 emit(Result.Success(response.body()))
             } else {
                 emit(Result.Error(response.errorBody().toString()))
+            }
+
+        } catch (e: HttpException) {
+            Log.e(TAG, e.message())
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun getUsers() = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val userResponse = apiService.getUsers("Bearer $token")
+
+            if (userResponse.isSuccessful) {
+                emit(Result.Success(userResponse.body()?.data))
+            } else {
+                emit(Result.Error(userResponse.errorBody().toString()))
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+
+    }
+
+    fun getAdminInfo() = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val adminResponse = apiService.getAdminInfo("Bearer $token")
+
+            if (adminResponse.isSuccessful) {
+                emit(Result.Success(adminResponse.body()))
+            } else {
+                emit(Result.Error(adminResponse.errorBody().toString()))
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun adminLogout() = liveData {
+        emit(Result.Loading)
+
+        try {
+
+            val token = authPreferences.getAuthToken().first()
+            val logoutResponse = apiService.adminLogout("Bearer $token")
+
+            if (logoutResponse.isSuccessful) {
+                authPreferences.removeAuthUser()
+                emit(Result.Success(logoutResponse.body()))
+            } else {
+                emit(Result.Error(logoutResponse.errorBody().toString()))
             }
 
         } catch (e: HttpException) {

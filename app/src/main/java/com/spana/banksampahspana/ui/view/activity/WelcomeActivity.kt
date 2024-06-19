@@ -3,8 +3,6 @@ package com.spana.banksampahspana.ui.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -27,9 +25,19 @@ class WelcomeActivity : AppCompatActivity() {
 
         authViewModel.getAuthToken().observe(this@WelcomeActivity) { token ->
             if (token.isNotEmpty()) {
-                val intent = Intent(this@WelcomeActivity, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                authViewModel.getAuthUser().observe(this@WelcomeActivity) { user ->
+                    if (user.role.lowercase() == "admin") {
+                        val intent = Intent(this@WelcomeActivity, AdminActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    if (user.role.lowercase() == "user") {
+                        val intent = Intent(this@WelcomeActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
             }
         }
 

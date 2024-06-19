@@ -57,9 +57,19 @@ class LoginActivity : AppCompatActivity() {
                     is Result.Success -> {
                         showLoading(false)
 
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finishAffinity()
+                        authViewModel.getAuthUser().observe(this) { user ->
+                            if (user.role.lowercase() == "user") {
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finishAffinity()
+                            }
+
+                            if (user.role.lowercase() == "admin") {
+                                val intent = Intent(this@LoginActivity, AdminActivity::class.java)
+                                startActivity(intent)
+                                finishAffinity()
+                            }
+                        }
                     }
 
                     is Result.Error -> {

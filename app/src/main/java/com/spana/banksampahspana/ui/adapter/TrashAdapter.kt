@@ -21,6 +21,9 @@ class TrashAdapter(private val trashes: ArrayList<Trash>) :
         val trash = trashes[position]
 
         holder.binding.txtTrashTypeVal.text = trash.trashType
+        holder.binding.txtTrashDateVal.text = trash.createdAt
+        holder.binding.txtTrashWeightVal.text = "${trash.weight} kg"
+        holder.binding.txtTrashPriceVal.text = "Rp.${trash.totalDeposit}"
     }
 
     override fun getItemCount(): Int {

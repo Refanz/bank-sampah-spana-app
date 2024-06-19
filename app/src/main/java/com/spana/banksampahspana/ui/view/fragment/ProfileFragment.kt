@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
             }
             setPositiveButton("Ya") { _, _ ->
 
-                authViewModel.logout().observe(viewLifecycleOwner) { result ->
+                authViewModel.userLogout().observe(viewLifecycleOwner) { result ->
                     when (result) {
                         is Result.Loading -> {}
 
@@ -118,7 +118,7 @@ class ProfileFragment : Fragment() {
                         }
 
                         is Result.Success -> {
-                            authViewModel.logout().observe(viewLifecycleOwner) { result ->
+                            authViewModel.userLogout().observe(viewLifecycleOwner) { result ->
                                 when (result) {
                                     is Result.Loading -> {}
 

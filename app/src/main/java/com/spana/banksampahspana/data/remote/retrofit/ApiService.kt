@@ -1,5 +1,6 @@
 package com.spana.banksampahspana.data.remote.retrofit
 
+import com.spana.banksampahspana.data.remote.response.AdminResponse
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
@@ -9,6 +10,7 @@ import com.spana.banksampahspana.data.remote.response.TrashResponse
 import com.spana.banksampahspana.data.remote.response.UpdateUserInfoResponse
 import com.spana.banksampahspana.data.remote.response.UserResponse
 import com.spana.banksampahspana.data.remote.response.UserTrashResponse
+import com.spana.banksampahspana.data.remote.response.UsersResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalHistoryResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalResponse
 import retrofit2.Response
@@ -22,9 +24,21 @@ import retrofit2.http.PUT
 
 interface ApiService {
 
+    /* Admin */
+    @Headers("Accept: application/json")
+    @GET("admin")
+    suspend fun getAdminInfo(@Header("Authorization") authorization: String): Response<AdminResponse>
+
+    @Headers("Accept: application/json")
+    @GET("admin/users")
+    suspend fun getUsers(@Header("Authorization") authorization: String): Response<UsersResponse>
+
+    @Headers("Accept: application/json")
+    @POST("admin/logout")
+    suspend fun adminLogout(@Header("Authorization") authorization: String): Response<LogoutResponse>
+
 
     /* User */
-
     @FormUrlEncoded
     @Headers("Accept: application/json")
     @POST("login")
@@ -48,8 +62,8 @@ interface ApiService {
     ): Response<RegisterResponse>
 
     @Headers("Accept: application/json")
-    @POST("logout")
-    suspend fun logout(@Header("Authorization") authorization: String): Response<LogoutResponse>
+    @POST("user/logout")
+    suspend fun userLogout(@Header("Authorization") authorization: String): Response<LogoutResponse>
 
     @Headers("Accept: application/json")
     @GET("user")
@@ -69,11 +83,11 @@ interface ApiService {
         @Field("phone") phone: String
     ): Response<UpdateUserInfoResponse>
 
-    /* Trash */
-
+    /* Trash Categories */
     @GET("trash-categories")
     suspend fun getTrashCategory(): Response<TrashCategoryResponse>
 
+    /* Trash */
     @FormUrlEncoded
     @Headers("Accept: application/json")
     @POST("trashes")
@@ -90,7 +104,6 @@ interface ApiService {
     suspend fun getUserTrash(@Header("Authorization") authorization: String): Response<UserTrashResponse>
 
     /* Withdrawal */
-
     @FormUrlEncoded
     @Headers("Accept: application/json")
     @POST("withdrawal-history")
