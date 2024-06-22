@@ -5,6 +5,8 @@ import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
 import com.spana.banksampahspana.data.remote.response.TotalWithdrawalResponse
+import com.spana.banksampahspana.data.remote.response.TrashCategoryActionResponse
+import com.spana.banksampahspana.data.remote.response.TrashCategoryItemResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryResponse
 import com.spana.banksampahspana.data.remote.response.TrashResponse
 import com.spana.banksampahspana.data.remote.response.UpdateUserInfoResponse
@@ -13,7 +15,9 @@ import com.spana.banksampahspana.data.remote.response.UserTrashResponse
 import com.spana.banksampahspana.data.remote.response.UsersResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalHistoryResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -21,6 +25,8 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
+import retrofit2.http.Streaming
 
 interface ApiService {
 
@@ -37,6 +43,9 @@ interface ApiService {
     @POST("admin/logout")
     suspend fun adminLogout(@Header("Authorization") authorization: String): Response<LogoutResponse>
 
+    @Streaming
+    @GET("admin/download/transaction")
+    suspend fun downloadUserWithdrawalHistories(@Header("Authorization") authorization: String): ResponseBody
 
     /* User */
     @FormUrlEncoded
@@ -86,6 +95,39 @@ interface ApiService {
     /* Trash Categories */
     @GET("trash-categories")
     suspend fun getTrashCategory(): Response<TrashCategoryResponse>
+
+    @GET("admin/trash-categories/{id}")
+    suspend fun getTrashCategoryDetail(
+        @Header("authorization") authorization: String,
+        @Path("id") id: Int
+    ): Response<TrashCategoryItemResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("admin/trash-categories")
+    suspend fun addTrashCategory(
+        @Header("authorization") authorization: String,
+        @Field("name") trashCategoryName: String,
+        @Field("price") trashCategoryPrice: Int
+    ): Response<TrashCategoryItemResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin/trash-categories/{id}")
+    suspend fun updateTrashCategory(
+        @Header("authorization") authorization: String,
+        @Path("id") id: Int,
+        @Field("name") trashCategoryName: String,
+        @Field("price") trashCategoryPrice: Int
+    ): Response<TrashCategoryActionResponse>
+
+    @Headers("Accept: application/json")
+    @DELETE("admin/trash-categories/{id}")
+    suspend fun deleteTrashCategory(
+        @Header("authorization") authorization: String,
+        @Path("id") id: Int,
+    ): Response<TrashCategoryActionResponse>
+
 
     /* Trash */
     @FormUrlEncoded

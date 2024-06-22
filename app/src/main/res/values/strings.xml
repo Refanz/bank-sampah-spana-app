@@ -4,7 +4,9 @@
     <string name="txt_welcome">Selamat Datang!</string>
     <string name="txt_btn_login">Login</string>
     <string name="txt_login">Login</string>
-    <string name="tab_text_1">Riwayat Pemasukkan</string>
-    <string name="tab_text_2">Riwayat Penarikan</string>
+    <string name="tab_text_1">Baru Diajukan</string>
+    <string name="tab_text_2">Dalam Proses</string>
+    <string name="tab_text_3">Selesai</string>
+    <string name="tab_text_4">Dibatalkan</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

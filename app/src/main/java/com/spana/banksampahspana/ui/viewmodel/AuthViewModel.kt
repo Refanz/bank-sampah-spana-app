@@ -31,4 +31,6 @@ class AuthViewModel(
     fun getAdminInfo() = authRepository.getAdminInfo()
 
     fun adminLogout() = authRepository.adminLogout()
+
+    fun downloadUserWithdrawalHistories() = authRepository.downloadUserWithdrawalHistories()
 }

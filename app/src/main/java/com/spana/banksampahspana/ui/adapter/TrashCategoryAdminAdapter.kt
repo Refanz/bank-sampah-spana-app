@@ -9,6 +9,8 @@ import com.spana.banksampahspana.databinding.TrashCategoryAdminItemBinding
 class TrashCategoryAdminAdapter(private val trashCategories: ArrayList<TrashCategoryItem>) :
     RecyclerView.Adapter<TrashCategoryAdminAdapter.TrashCategoryAdminViewHolder>() {
 
+    private lateinit var trashCategoryActionCallback: TrashCategoryActionCallback
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -28,7 +30,15 @@ class TrashCategoryAdminAdapter(private val trashCategories: ArrayList<TrashCate
         val trashCategory = trashCategories[position]
 
         holder.binding.txtTrashTypeVal.text = trashCategory.name
-        holder.binding.txtTrashCategoryPriceVal.text = trashCategory.price
+        holder.binding.txtTrashCategoryPriceVal.text = trashCategory.price.toString()
+
+        holder.binding.btnEditTrashCategory.setOnClickListener {
+            this.trashCategoryActionCallback.onUpdate(trashCategory.id ?: 0)
+        }
+
+        holder.binding.btnDeleteTrashCategory.setOnClickListener {
+            this.trashCategoryActionCallback.onDelete(trashCategory.id ?: 0)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -37,4 +47,13 @@ class TrashCategoryAdminAdapter(private val trashCategories: ArrayList<TrashCate
 
     inner class TrashCategoryAdminViewHolder(val binding: TrashCategoryAdminItemBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    fun setTrashCategoryActionCallback(trashCategoryActionCallback: TrashCategoryActionCallback) {
+        this.trashCategoryActionCallback = trashCategoryActionCallback
+    }
+
+    interface TrashCategoryActionCallback {
+        fun onUpdate(id: Int)
+        fun onDelete(id: Int)
+    }
 }

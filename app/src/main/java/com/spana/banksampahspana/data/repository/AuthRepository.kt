@@ -207,6 +207,20 @@ class AuthRepository private constructor(
         }
     }
 
+    fun downloadUserWithdrawalHistories() = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val downloadResponse = apiService.downloadUserWithdrawalHistories("Bearer $token")
+
+            emit(Result.Success(downloadResponse))
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
     companion object {
         private const val TAG = "AuthRepository"
 

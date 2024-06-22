@@ -8,13 +8,26 @@ data class TrashCategoryResponse(
     val data: List<TrashCategoryItem?>? = null
 )
 
+data class TrashCategoryItemResponse(
+    @field:SerializedName("data")
+    val data: TrashCategoryItem
+)
+
+data class TrashCategoryActionResponse(
+    @field:SerializedName("status")
+    val status: String,
+
+    @field:SerializedName("message")
+    val message: String
+)
+
 data class TrashCategoryItem(
 
     @field:SerializedName("unit")
     val unit: String? = null,
 
     @field:SerializedName("price")
-    val price: String? = null,
+    val price: Int? = null,
 
     @field:SerializedName("name")
     val name: String? = null,

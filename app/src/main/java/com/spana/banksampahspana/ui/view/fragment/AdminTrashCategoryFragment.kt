@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItem
 import com.spana.banksampahspana.databinding.FragmentAdminTrashCategoryBinding
@@ -55,6 +57,18 @@ class AdminTrashCategoryFragment : Fragment() {
                     val adapter =
                         TrashCategoryAdminAdapter(result.data as ArrayList<TrashCategoryItem>)
                     binding?.rvTrashCategories?.adapter = adapter
+
+                    adapter.setTrashCategoryActionCallback(object :
+                        TrashCategoryAdminAdapter.TrashCategoryActionCallback {
+                        override fun onUpdate(id: Int) {
+                            Toast.makeText(requireContext(), id.toString(), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        override fun onDelete(id: Int) {
+                            showDialogDeleteTrashCategory(id)
+                        }
+                    })
                 }
 
                 is Result.Error -> {
@@ -64,8 +78,37 @@ class AdminTrashCategoryFragment : Fragment() {
         }
     }
 
+    private fun showDialogDeleteTrashCategory(id: Int) {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle("Kategori Sampah")
+            setMessage("Ingin menghapus kategori sampah dengan id $id")
+            setNegativeButton("Tidak") { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton("Ya") { _, _ ->
+                trashViewModel.deleteTrashCategory(id).observe(viewLifecycleOwner) { result ->
+                    when (result) {
+                        is Result.Loading -> {}
+
+                        is Result.Success -> {
+                            showToast("Berhasil menghapus kategori sampah dengan id $id")
+                        }
+
+                        is Result.Error -> {
+                            showToast(result.error)
+                        }
+                    }
+                }
+            }
+        }.show()
+    }
+
     private fun showLoading(isLoading: Boolean) {
         binding?.progressBarTrash?.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun obtainTrashCategory(activity: AppCompatActivity): TrashViewModel {

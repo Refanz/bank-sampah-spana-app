@@ -32,7 +32,7 @@
             app:layout_constraintTop_toBottomOf="@id/txt_admin" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_balance"
+            android:id="@+id/cv_add_trash_category"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginHorizontal="12dp"
@@ -57,13 +57,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/btn_add_trash_category"
+                    style="?attr/materialIconButtonFilledStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:src="@drawable/ic_category"
+                    app:icon="@drawable/ic_category"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txt_new_trash_category" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -80,7 +81,7 @@
             app:contentPadding="10dp"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cv_balance"
+            app:layout_constraintStart_toEndOf="@id/cv_add_trash_category"
             app:layout_constraintTop_toBottomOf="@id/txt_welcome_admin">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,13 +97,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/btn_add_trash"
+                    style="?attr/materialIconButtonFilledStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@null"
-                    android:src="@drawable/ic_add_trash"
+                    app:icon="@drawable/ic_add_trash"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txt_add_trash" />
 
@@ -110,95 +111,56 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/txt_trash_category"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="12dp"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:text="Kategori Sampah"-->
-        <!--            android:textSize="20sp"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/cv_balance" />-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_download"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            app:cardElevation="5dp"
+            app:contentPadding="10dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="@id/cv_add_trash_category"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_add_trash_category">
 
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/rv_trash_category"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="100dp"-->
-        <!--            android:layout_marginHorizontal="12dp"-->
-        <!--            android:layout_marginTop="15dp"-->
-        <!--            android:padding="8dp"-->
-        <!--            android:scrollbars="none"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/txt_trash_category" />-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/txt_transaction_history"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="12dp"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:text="Riwayat Tarik Tunai"-->
-        <!--            android:textSize="20sp"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/rv_trash_category" />-->
+                <TextView
+                    android:id="@+id/txt_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unduh Data Riwayat Penarikan"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <!--        <com.google.android.material.card.MaterialCardView-->
-        <!--            android:id="@+id/cv_withdrawal"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="12dp"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            app:cardElevation="5dp"-->
-        <!--            app:contentPadding="10dp"-->
-        <!--            app:layout_constrainedWidth="true"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/txt_transaction_history">-->
+                <Button
+                    android:id="@+id/btn_download"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:icon="@drawable/ic_download"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_download" />
 
-        <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content">-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--                <TextView-->
-        <!--                    android:id="@+id/txt_withdrawal"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:text="Jumlah Tarik Tunai"-->
-        <!--                    android:textSize="17sp"-->
-        <!--                    app:layout_constraintStart_toStartOf="parent"-->
-        <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+        </com.google.android.material.card.MaterialCardView>
 
-        <!--                <TextView-->
-        <!--                    android:id="@+id/txt_val_withdrawal"-->
-        <!--                    android:layout_width="wrap_content"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_marginTop="10dp"-->
-        <!--                    android:text="Rp.0"-->
-        <!--                    android:textSize="15sp"-->
-        <!--                    app:layout_constraintStart_toStartOf="parent"-->
-        <!--                    app:layout_constraintTop_toBottomOf="@id/txt_withdrawal" />-->
-
-
-        <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-        <!--        </com.google.android.material.card.MaterialCardView>-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/txt_transaction_detail"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginHorizontal="12dp"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:text="Lihat Detail &ndash;&gt;"-->
-        <!--            android:textStyle="bold"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/cv_withdrawal" />-->
+        <ProgressBar
+            android:id="@+id/progressBarHome"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>

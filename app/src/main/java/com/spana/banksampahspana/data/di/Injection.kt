@@ -23,8 +23,10 @@ object Injection {
     }
 
     fun provideTrashCategoryRepository(context: Context): TrashCategoryRepository {
+        val authPreferences = provideAuthPreferences(context)
+
         val apiService = ApiConfig.getApiService()
-        return TrashCategoryRepository.getInstance(apiService)
+        return TrashCategoryRepository.getInstance(apiService, authPreferences)
     }
 
     fun provideTrashRepository(context: Context): TrashRepository {
