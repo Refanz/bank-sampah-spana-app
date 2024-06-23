@@ -1,15 +1,20 @@
 package com.spana.banksampahspana.ui.view.fragment
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.messaging.FirebaseMessaging
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.databinding.FragmentAdminHomeBinding
 import com.spana.banksampahspana.ui.view.activity.TrashAddAdminActivity
@@ -25,6 +30,15 @@ class AdminHomeFragment : Fragment() {
 
     private lateinit var authViewModel: AuthViewModel
 
+    private val requestNotificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                showToast("Notifications permission granted")
+            } else {
+                showToast("Notifications permission rejected")
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,6 +51,17 @@ class AdminHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authViewModel = obtainAuthViewModel(requireActivity() as AppCompatActivity)
+
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                Log.d("AAAAAAAAAAAAAAAAAA", token)
+            }
+        }
 
         authViewModel.getAuthUser().observe(viewLifecycleOwner) { user ->
             binding?.txtAdmin?.text = "Hai, ${user.name}"

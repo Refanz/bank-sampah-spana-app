@@ -149,6 +149,36 @@ class AuthRepository private constructor(
         }
     }
 
+    fun updateUserAdmin(user: User) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+
+            val response = apiService.updateUserAdmin(
+                id = user.id,
+                name = user.name,
+                email = user.email,
+                nis = user.nis,
+                phone = user.phone,
+                gender = user.gender,
+                paymentMethod = user.paymentMethod,
+                studentClass = user.studentClass,
+                authorization = "Bearer $token"
+            )
+
+            if (response.isSuccessful) {
+                emit(Result.Success(response.body()))
+            } else {
+                emit(Result.Error(response.errorBody().toString()))
+            }
+
+        } catch (e: HttpException) {
+            Log.e(TAG, e.message())
+            emit(Result.Error(e.message()))
+        }
+    }
+
     fun getUsers() = liveData {
         emit(Result.Loading)
 
@@ -215,6 +245,24 @@ class AuthRepository private constructor(
             val downloadResponse = apiService.downloadUserWithdrawalHistories("Bearer $token")
 
             emit(Result.Success(downloadResponse))
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun deleteUser(id: Int) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val userResponse = apiService.deleteUser("Bearer $token", id)
+
+            if (userResponse.isSuccessful) {
+                emit(Result.Success(userResponse.body()))
+            } else {
+                emit(Result.Error(userResponse.message()))
+            }
 
         } catch (e: HttpException) {
             emit(Result.Error(e.message()))

@@ -67,6 +67,44 @@ class WithdrawalRepository private constructor(
         }
     }
 
+    fun getUserWithdrawalHistoriesByStatus(status: String) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val withdrawalResponse =
+                apiService.getUserWithdrawalHistoriesByStatus("Bearer $token", status)
+
+            if (withdrawalResponse.isSuccessful) {
+                emit(Result.Success(withdrawalResponse.body()?.data))
+            } else {
+                emit(Result.Error(withdrawalResponse.message()))
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun updateUserWithdrawalStatus(id: Int, status: String) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val withdrawalResponse =
+                apiService.updateUserWithdrawalStatus("Bearer $token", id, status)
+
+            if (withdrawalResponse.isSuccessful) {
+                emit(Result.Success(withdrawalResponse.body()))
+            } else {
+                emit(Result.Error(withdrawalResponse.message()))
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
     companion object {
 
         private const val TAG = "WithdrawalRepository"

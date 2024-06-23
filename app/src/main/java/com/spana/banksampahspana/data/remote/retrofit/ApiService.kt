@@ -1,6 +1,7 @@
 package com.spana.banksampahspana.data.remote.retrofit
 
 import com.spana.banksampahspana.data.remote.response.AdminResponse
+import com.spana.banksampahspana.data.remote.response.DeleteUserResponse
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
@@ -10,9 +11,11 @@ import com.spana.banksampahspana.data.remote.response.TrashCategoryItemResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryResponse
 import com.spana.banksampahspana.data.remote.response.TrashResponse
 import com.spana.banksampahspana.data.remote.response.UpdateUserInfoResponse
+import com.spana.banksampahspana.data.remote.response.UpdateWithdrawalAdminResponse
 import com.spana.banksampahspana.data.remote.response.UserResponse
 import com.spana.banksampahspana.data.remote.response.UserTrashResponse
 import com.spana.banksampahspana.data.remote.response.UsersResponse
+import com.spana.banksampahspana.data.remote.response.WithdrawalAdminResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalHistoryResponse
 import com.spana.banksampahspana.data.remote.response.WithdrawalResponse
 import okhttp3.ResponseBody
@@ -46,6 +49,55 @@ interface ApiService {
     @Streaming
     @GET("admin/download/transaction")
     suspend fun downloadUserWithdrawalHistories(@Header("Authorization") authorization: String): ResponseBody
+
+    @Headers("Accept: application/json")
+    @GET("admin/withdrawal-histories/{status}")
+    suspend fun getUserWithdrawalHistoriesByStatus(
+        @Header("Authorization") authorization: String,
+        @Path("status") status: String
+    ): Response<WithdrawalAdminResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin/withdrawal-history/{id}")
+    suspend fun updateUserWithdrawalStatus(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Field("status") status: String
+    ): Response<UpdateWithdrawalAdminResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("admin/trash")
+    suspend fun addUserTrashAdmin(
+        @Header("Authorization") authorization: String,
+        @Field("trash_type") trashType: String,
+        @Field("weight") weight: Double,
+        @Field("total_deposit") totalDeposit: Int,
+        @Field("nis") nis: String,
+    ): Response<TrashResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin/users/{id}")
+    suspend fun updateUserAdmin(
+        @Header("Authorization") authorization: String,
+        @Path("id") id: Int,
+        @Field("email") email: String,
+        @Field("name") name: String,
+        @Field("nis") nis: String,
+        @Field("class") studentClass: Int,
+        @Field("gender") gender: String,
+        @Field("payment_method") paymentMethod: String,
+        @Field("phone") phone: String
+    ): Response<UpdateUserInfoResponse>
+
+    @Headers("Accept: application/json")
+    @DELETE("admin/users/{id}")
+    suspend fun deleteUser(
+        @Header("authorization") authorization: String,
+        @Path("id") id: Int,
+    ): Response<DeleteUserResponse>
 
     /* User */
     @FormUrlEncoded

@@ -9,4 +9,10 @@ class WithdrawalViewModel(private val withdrawalRepository: WithdrawalRepository
     fun getUserTotalWithdrawal() = withdrawalRepository.getUserTotalWithdrawal()
 
     fun getUserWithdrawalHistories() = withdrawalRepository.getUserWithdrawalHistories()
+
+    fun getUSerWithdrawalHistoriesByStatus(status: String) =
+        withdrawalRepository.getUserWithdrawalHistoriesByStatus(status)
+
+    fun updateUserWithdrawalStatus(id: Int, status: String) =
+        withdrawalRepository.updateUserWithdrawalStatus(id, status)
 }

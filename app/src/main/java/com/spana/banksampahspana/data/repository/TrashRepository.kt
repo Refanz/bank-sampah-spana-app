@@ -38,6 +38,30 @@ class TrashRepository private constructor(
         }
     }
 
+    fun addUserTrashAdmin(trash: Trash, nis: String) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val trashResponse = apiService.addUserTrashAdmin(
+                "Bearer $token",
+                trash.trashType,
+                trash.weight,
+                trash.totalDeposit,
+                nis
+            )
+
+            if (trashResponse.isSuccessful) {
+                emit(Result.Success(trashResponse.body()))
+            } else {
+                emit(Result.Error(trashResponse.message()))
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
     fun getUserTrash() = liveData {
         emit(Result.Loading)
 

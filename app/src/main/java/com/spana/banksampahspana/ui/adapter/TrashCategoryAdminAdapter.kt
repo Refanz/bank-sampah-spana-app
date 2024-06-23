@@ -33,7 +33,7 @@ class TrashCategoryAdminAdapter(private val trashCategories: ArrayList<TrashCate
         holder.binding.txtTrashCategoryPriceVal.text = trashCategory.price.toString()
 
         holder.binding.btnEditTrashCategory.setOnClickListener {
-            this.trashCategoryActionCallback.onUpdate(trashCategory.id ?: 0)
+            this.trashCategoryActionCallback.onUpdate(trashCategory)
         }
 
         holder.binding.btnDeleteTrashCategory.setOnClickListener {
@@ -53,7 +53,7 @@ class TrashCategoryAdminAdapter(private val trashCategories: ArrayList<TrashCate
     }
 
     interface TrashCategoryActionCallback {
-        fun onUpdate(id: Int)
+        fun onUpdate(trashCategoryItem: TrashCategoryItem)
         fun onDelete(id: Int)
     }
 }

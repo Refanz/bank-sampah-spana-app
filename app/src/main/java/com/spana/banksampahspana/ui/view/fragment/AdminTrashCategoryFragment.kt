@@ -1,5 +1,6 @@
 package com.spana.banksampahspana.ui.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItem
 import com.spana.banksampahspana.databinding.FragmentAdminTrashCategoryBinding
 import com.spana.banksampahspana.ui.adapter.TrashCategoryAdminAdapter
+import com.spana.banksampahspana.ui.view.activity.TrashCategoryUpdateActivity
 import com.spana.banksampahspana.ui.viewmodel.TrashViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 
@@ -60,9 +62,11 @@ class AdminTrashCategoryFragment : Fragment() {
 
                     adapter.setTrashCategoryActionCallback(object :
                         TrashCategoryAdminAdapter.TrashCategoryActionCallback {
-                        override fun onUpdate(id: Int) {
-                            Toast.makeText(requireContext(), id.toString(), Toast.LENGTH_SHORT)
-                                .show()
+                        override fun onUpdate(trashCategoryItem: TrashCategoryItem) {
+                            val intent =
+                                Intent(requireContext(), TrashCategoryUpdateActivity::class.java)
+                            intent.putExtra(TRASH_CATEGORY_ITEM_EXTRA, trashCategoryItem);
+                            startActivity(intent)
                         }
 
                         override fun onDelete(id: Int) {
@@ -119,5 +123,9 @@ class AdminTrashCategoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TRASH_CATEGORY_ITEM_EXTRA = "trash_category_extra"
     }
 }

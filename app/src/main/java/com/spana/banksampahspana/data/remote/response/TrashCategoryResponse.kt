@@ -1,6 +1,8 @@
 package com.spana.banksampahspana.data.remote.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class TrashCategoryResponse(
 
@@ -21,6 +23,7 @@ data class TrashCategoryActionResponse(
     val message: String
 )
 
+@Parcelize
 data class TrashCategoryItem(
 
     @field:SerializedName("unit")
@@ -34,4 +37,4 @@ data class TrashCategoryItem(
 
     @field:SerializedName("id")
     val id: Int? = null
-)
+) : Parcelable

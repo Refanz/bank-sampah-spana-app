@@ -26,6 +26,8 @@ class AuthViewModel(
 
     fun updateUserInfo(user: User) = authRepository.updateUserInfo(user)
 
+    fun updateUserAdmin(user: User) = authRepository.updateUserAdmin(user)
+
     fun getUsers() = authRepository.getUsers()
 
     fun getAdminInfo() = authRepository.getAdminInfo()
@@ -33,4 +35,6 @@ class AuthViewModel(
     fun adminLogout() = authRepository.adminLogout()
 
     fun downloadUserWithdrawalHistories() = authRepository.downloadUserWithdrawalHistories()
+
+    fun deleteUser(id: Int) = authRepository.deleteUser(id)
 }

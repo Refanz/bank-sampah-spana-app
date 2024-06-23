@@ -1,5 +1,6 @@
 package com.spana.banksampahspana.ui.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.spana.banksampahspana.data.Result
-import com.spana.banksampahspana.data.remote.response.Admin
 import com.spana.banksampahspana.data.remote.response.User
 import com.spana.banksampahspana.databinding.FragmentUsersBinding
 import com.spana.banksampahspana.ui.adapter.UserAdapter
+import com.spana.banksampahspana.ui.view.activity.UserUpdateActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 
@@ -54,6 +56,17 @@ class UsersFragment : Fragment() {
                     showLoading(false)
 
                     val adapter = UserAdapter(result.data as ArrayList<User>)
+                    adapter.setOnUserActionCallback(object : UserAdapter.UserActionCallback {
+                        override fun onUpdate(user: User) {
+                            val intent = Intent(requireActivity(), UserUpdateActivity::class.java)
+                            intent.putExtra(USER_EXTRA, user)
+                            startActivity(intent)
+                        }
+
+                        override fun onDelete(id: Int) {
+                            showDeleteUserDialog(id)
+                        }
+                    })
                     binding?.rvUsers?.adapter = adapter
                 }
 
@@ -61,6 +74,33 @@ class UsersFragment : Fragment() {
                     showLoading(false)
                     showToast(result.error)
                 }
+            }
+        }
+    }
+
+    private fun showDeleteUserDialog(id: Int) {
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle("Data User")
+            setMessage("Ingin menghapus user dengan id $id?")
+            setNegativeButton("Tidak") { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton("Ya") { _, _ ->
+                deleteUser(id)
+            }
+        }.show()
+    }
+
+    private fun deleteUser(id: Int) {
+        authViewModel.deleteUser(id).observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {}
+
+                is Result.Success -> {
+                    showToast("Berhasil menghapus user dengan id $id")
+                }
+
+                is Result.Error -> {}
             }
         }
     }
@@ -81,5 +121,9 @@ class UsersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val USER_EXTRA = "user_item_extra"
     }
 }

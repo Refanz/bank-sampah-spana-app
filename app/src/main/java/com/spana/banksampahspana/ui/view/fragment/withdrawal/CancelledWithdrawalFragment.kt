@@ -1,60 +1,87 @@
 package com.spana.banksampahspana.ui.view.fragment.withdrawal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.spana.banksampahspana.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.spana.banksampahspana.data.Result
+import com.spana.banksampahspana.data.remote.response.WithdrawalAdmin
+import com.spana.banksampahspana.databinding.FragmentCancelledWithdrawalBinding
+import com.spana.banksampahspana.ui.adapter.WithdrawalAdminCancelledAdapter
+import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
+import com.spana.banksampahspana.ui.viewmodel.WithdrawalViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CancelledWithdrawalFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CancelledWithdrawalFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentCancelledWithdrawalBinding? = null
+    private val binding get() = _binding
+
+    private lateinit var withdrawalViewModel: WithdrawalViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cancelled_withdrawal, container, false)
+        _binding = FragmentCancelledWithdrawalBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment CancelledWithdrawalFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CancelledWithdrawalFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        withdrawalViewModel = obtainWithdrawalViewModel(requireActivity() as AppCompatActivity)
+        setRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setRecyclerView()
+    }
+
+    private fun setRecyclerView() {
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding?.rvWithdrawalHistories?.layoutManager = layoutManager
+
+        withdrawalViewModel.getUSerWithdrawalHistoriesByStatus("cancelled")
+            .observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+
+                    is Result.Success -> {
+                        showLoading(false)
+                        setRecyclerViewData(result.data as ArrayList<WithdrawalAdmin>)
+                    }
+
+                    is Result.Error -> {
+                        showLoading(false)
+                    }
                 }
             }
+    }
+
+    private fun setRecyclerViewData(data: ArrayList<WithdrawalAdmin>) {
+        val adapter =
+            WithdrawalAdminCancelledAdapter(data)
+        binding?.rvWithdrawalHistories?.adapter = adapter
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding?.progressBarWithdrawal?.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun obtainWithdrawalViewModel(activity: AppCompatActivity): WithdrawalViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[WithdrawalViewModel::class.java]
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
