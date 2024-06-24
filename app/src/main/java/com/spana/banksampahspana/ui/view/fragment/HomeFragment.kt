@@ -2,6 +2,7 @@ package com.spana.banksampahspana.ui.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.messaging.FirebaseMessaging
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItem
 import com.spana.banksampahspana.databinding.FragmentHomeBinding
@@ -19,6 +21,7 @@ import com.spana.banksampahspana.ui.adapter.TrashCategoryAdapter
 import com.spana.banksampahspana.ui.view.activity.TrashAddActivity
 import com.spana.banksampahspana.ui.view.activity.WithdrawalHistoryActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
+import com.spana.banksampahspana.ui.viewmodel.NotificationViewModel
 import com.spana.banksampahspana.ui.viewmodel.TrashViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 import com.spana.banksampahspana.ui.viewmodel.WithdrawalViewModel
@@ -31,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var trashViewModel: TrashViewModel
     private lateinit var withdrawalViewModel: WithdrawalViewModel
+    private lateinit var notificationViewModel: NotificationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +50,32 @@ class HomeFragment : Fragment() {
         authViewModel = obtainViewModel(requireContext() as AppCompatActivity)
         trashViewModel = obtainTrashViewModel(requireContext() as AppCompatActivity)
         withdrawalViewModel = obtainWithdrawalViewModel(requireContext() as AppCompatActivity)
+        notificationViewModel = obtainNotificationViewModel(requireContext() as AppCompatActivity)
+
+        authViewModel.getAuthUser().observe(viewLifecycleOwner) { result ->
+
+            val id = result.id
+
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val token = task.result
+                    Log.d("token", token)
+
+                    notificationViewModel.updateToken(id, token)
+                        .observe(viewLifecycleOwner) { result ->
+                            when (result) {
+                                is Result.Loading -> {}
+
+                                is Result.Success -> {
+                                    Log.d("HomeFragment", token)
+                                }
+
+                                is Result.Error -> {}
+                            }
+                        }
+                }
+            }
+        }
 
         binding?.btnAddTrash?.setOnClickListener {
             val intent = Intent(requireContext(), TrashAddActivity::class.java)
@@ -189,6 +219,10 @@ class HomeFragment : Fragment() {
         return ViewModelProvider(activity, factory)[WithdrawalViewModel::class.java]
     }
 
+    private fun obtainNotificationViewModel(activity: AppCompatActivity): NotificationViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[NotificationViewModel::class.java]
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

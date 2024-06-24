@@ -10,7 +10,12 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.spana.banksampahspana.R
+import com.spana.banksampahspana.data.di.Injection
 import com.spana.banksampahspana.ui.view.activity.AdminActivity
+import com.spana.banksampahspana.ui.view.activity.WithdrawalHistoryActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WithdrawalFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -27,7 +32,7 @@ class WithdrawalFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
-        val contentIntent = Intent(applicationContext, AdminActivity::class.java)
+        val contentIntent = Intent(applicationContext, WithdrawalHistoryActivity::class.java)
         val contentPendingIntent = PendingIntent.getActivity(
             applicationContext,
             NOTIFICATION_ID,
@@ -59,7 +64,7 @@ class WithdrawalFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
-        private val TAG = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        private val TAG = "FirebaseCloudMessagingService"
         private const val NOTIFICATION_ID = 1
         private const val NOTIFICATION_CHANNEL_ID = "Firebase Channel"
         private const val NOTIFICATION_CHANNEL_NAME = "Firebase Notification"

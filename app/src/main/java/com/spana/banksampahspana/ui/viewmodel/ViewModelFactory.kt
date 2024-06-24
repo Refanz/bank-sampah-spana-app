@@ -30,6 +30,12 @@ class ViewModelFactory private constructor(private val mApplication: Application
             ) as T
         }
 
+        if (modelClass.isAssignableFrom(NotificationViewModel::class.java)) {
+            return NotificationViewModel(
+                Injection.provideNotificationRepository(mApplication)
+            ) as T
+        }
+
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 

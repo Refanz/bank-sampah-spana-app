@@ -1,6 +1,7 @@
 package com.spana.banksampahspana.ui.view.fragment.withdrawal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.remote.response.WithdrawalAdmin
 import com.spana.banksampahspana.databinding.FragmentCompletedWithdrawalBinding
 import com.spana.banksampahspana.ui.adapter.WithdrawalAdminAdapter
+import com.spana.banksampahspana.ui.viewmodel.NotificationViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 import com.spana.banksampahspana.ui.viewmodel.WithdrawalViewModel
 
@@ -73,11 +75,11 @@ class CompletedWithdrawalFragment : Fragment() {
 
         adapter.setOnWithdrawalAdminActionCallback(object :
             WithdrawalAdminAdapter.WithdrawalAdminActionCallback {
-            override fun onProcess(id: Int) {
+            override fun onProcess(id: Int, userId: Int) {
                 showDialogProcess()
             }
 
-            override fun onCancel(id: Int) {
+            override fun onCancel(id: Int, userId: Int) {
                 showDialogCancel()
             }
         })

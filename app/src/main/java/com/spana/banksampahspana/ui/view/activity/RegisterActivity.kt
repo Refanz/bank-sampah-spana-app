@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.model.User
@@ -41,11 +42,30 @@ class RegisterActivity : AppCompatActivity() {
             val name = binding?.inputName?.text.toString()
             val email = binding?.inputEmail?.text.toString()
             val password = binding?.inputPassword?.text.toString()
+            val passwordConfirm = binding?.inputPasswordConfirm?.text.toString()
             val paymentMethod = binding?.inputPaymentMethod?.text.toString()
             val gender = binding?.inputGender?.text.toString()
             val phone = binding?.inputPhone?.text.toString()
-            val studentClass = binding?.inputClass?.text.toString().toInt()
+            val studentClass = binding?.inputClass?.text.toString()
             val nis = binding?.inputNis?.text.toString()
+
+            if (name.isEmpty() ||
+                email.isEmpty() ||
+                password.isEmpty() ||
+                paymentMethod.isEmpty() ||
+                gender.isEmpty() ||
+                phone.isEmpty() ||
+                studentClass.isEmpty() ||
+                nis.isEmpty()
+            ) {
+                showToast("Isi semua field!")
+                return@setOnClickListener
+            }
+
+            if (password != passwordConfirm) {
+                showToast("Password dan konfirmasi password berbeda!")
+                return@setOnClickListener
+            }
 
             val user = User(
                 name = name,
@@ -54,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
                 password = password,
                 email = email,
                 paymentMethod = paymentMethod,
-                studentClass = studentClass,
+                studentClass = studentClass.toInt(),
                 nis = nis
             )
 
@@ -66,7 +86,21 @@ class RegisterActivity : AppCompatActivity() {
 
                     is Result.Success -> {
                         showLoading(false)
-                        showToast(result.data.toString())
+
+                        resetInput()
+
+                        MaterialAlertDialogBuilder(this).apply {
+                            setTitle("Registrasi User")
+                            setMessage("Registrasi berhasil ingin login?")
+                            setNegativeButton("Tidak") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            setPositiveButton("Ya") { _, _ ->
+                                val intent =
+                                    Intent(this@RegisterActivity, LoginActivity::class.java)
+                                startActivity(intent)
+                            }
+                        }.show()
                     }
 
                     is Result.Error -> {
@@ -76,6 +110,18 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun resetInput() {
+        binding?.inputName?.text = null
+        binding?.inputEmail?.text = null
+        binding?.inputPassword?.text = null
+        binding?.inputPasswordConfirm?.text = null
+        binding?.inputPaymentMethod?.text = null
+        binding?.inputGender?.text = null
+        binding?.inputPhone?.text = null
+        binding?.inputClass?.text = null
+        binding?.inputNis?.text = null
     }
 
     private fun initBinding() {

@@ -1,9 +1,7 @@
 package com.spana.banksampahspana.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.spana.banksampahspana.data.remote.response.WithdrawalAdmin
 import com.spana.banksampahspana.databinding.WithdrawalAdminItemBinding
@@ -29,6 +27,7 @@ class WithdrawalAdminAdapter(private val withdrawalHistories: ArrayList<Withdraw
         val withdrawalHistory = withdrawalHistories[position]
 
         val id = withdrawalHistory.withdrawalId
+        val userId = withdrawalHistory.userId
 
         holder.binding.txtUserNameVal.text = withdrawalHistory.name
         holder.binding.txtUserNisVal.text = withdrawalHistory.nis
@@ -39,11 +38,11 @@ class WithdrawalAdminAdapter(private val withdrawalHistories: ArrayList<Withdraw
         holder.binding.txtTotalWithdrawalVal.text = "Rp. ${withdrawalHistory.totalWithdrawal}"
 
         holder.binding.btnProcessWithdrawal.setOnClickListener {
-            withdrawalAdminActionCallback.onProcess(id)
+            withdrawalAdminActionCallback.onProcess(id, userId)
         }
 
         holder.binding.btnCancelWithdrawal.setOnClickListener {
-            withdrawalAdminActionCallback.onCancel(id)
+            withdrawalAdminActionCallback.onCancel(id, userId)
         }
     }
 
@@ -59,7 +58,7 @@ class WithdrawalAdminAdapter(private val withdrawalHistories: ArrayList<Withdraw
         RecyclerView.ViewHolder(binding.root)
 
     interface WithdrawalAdminActionCallback {
-        fun onProcess(id: Int)
-        fun onCancel(id: Int)
+        fun onProcess(id: Int, userId: Int)
+        fun onCancel(id: Int, userId: Int)
     }
 }

@@ -4,7 +4,9 @@ import com.spana.banksampahspana.data.remote.response.AdminResponse
 import com.spana.banksampahspana.data.remote.response.DeleteUserResponse
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
+import com.spana.banksampahspana.data.remote.response.NotificationResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
+import com.spana.banksampahspana.data.remote.response.TokenResponse
 import com.spana.banksampahspana.data.remote.response.TotalWithdrawalResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryActionResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItemResponse
@@ -217,4 +219,22 @@ interface ApiService {
     suspend fun getUserWithdrawalHistories(
         @Header("Authorization") authorization: String
     ): Response<WithdrawalHistoryResponse>
+
+    // Notification
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("admin/notif")
+    suspend fun sendNotification(
+        @Field("id") id: Int,
+        @Field("title") title: String,
+        @Field("body") body: String
+    ): Response<NotificationResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin/token")
+    suspend fun updateToken(
+        @Field("id") id: Int,
+        @Field("fcm_token") fcmToken: String,
+    ): Response<TokenResponse>
 }

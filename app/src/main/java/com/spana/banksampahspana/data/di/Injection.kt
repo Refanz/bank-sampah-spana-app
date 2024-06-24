@@ -5,6 +5,7 @@ import com.spana.banksampahspana.data.local.AuthPreferences
 import com.spana.banksampahspana.data.local.dataStore
 import com.spana.banksampahspana.data.remote.retrofit.ApiConfig
 import com.spana.banksampahspana.data.repository.AuthRepository
+import com.spana.banksampahspana.data.repository.NotificationRepository
 import com.spana.banksampahspana.data.repository.TrashCategoryRepository
 import com.spana.banksampahspana.data.repository.TrashRepository
 import com.spana.banksampahspana.data.repository.WithdrawalRepository
@@ -20,6 +21,13 @@ object Injection {
 
     fun provideAuthPreferences(context: Context): AuthPreferences {
         return AuthPreferences.getInstance(context.dataStore)
+    }
+
+    fun provideNotificationRepository(context: Context): NotificationRepository {
+        val authPreferences = provideAuthPreferences(context)
+
+        val apiService = ApiConfig.getApiService()
+        return NotificationRepository.getInstance(apiService, authPreferences)
     }
 
     fun provideTrashCategoryRepository(context: Context): TrashCategoryRepository {

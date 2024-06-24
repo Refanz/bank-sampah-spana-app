@@ -1,6 +1,7 @@
 package com.spana.banksampahspana.ui.view.fragment.withdrawal
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.remote.response.WithdrawalAdmin
 import com.spana.banksampahspana.databinding.FragmentProcessingWithdrawalBinding
 import com.spana.banksampahspana.ui.adapter.WithdrawalAdminAdapter
+import com.spana.banksampahspana.ui.viewmodel.NotificationViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 import com.spana.banksampahspana.ui.viewmodel.WithdrawalViewModel
 
@@ -23,6 +25,7 @@ class ProcessingWithdrawalFragment : Fragment() {
     private val binding get() = _binding
 
     private lateinit var withdrawalViewModel: WithdrawalViewModel
+    private lateinit var notificationViewModel: NotificationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +39,7 @@ class ProcessingWithdrawalFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         withdrawalViewModel = obtainWithdrawalViewModel(requireActivity() as AppCompatActivity)
+        notificationViewModel = obtainNotificationViewModel(requireActivity() as AppCompatActivity)
 
         setRecyclerView()
     }
@@ -75,19 +79,35 @@ class ProcessingWithdrawalFragment : Fragment() {
 
         adapter.setOnWithdrawalAdminActionCallback(object :
             WithdrawalAdminAdapter.WithdrawalAdminActionCallback {
-            override fun onProcess(id: Int) {
-                showDialogProcess(id, "completed")
+            override fun onProcess(id: Int, userId: Int) {
+                showDialogProcess(id, userId, "completed")
             }
 
-            override fun onCancel(id: Int) {
-                showDialogCancel(id, "cancelled")
+            override fun onCancel(id: Int, userId: Int) {
+                showDialogCancel(id, userId, "cancelled")
             }
         })
 
         binding?.rvWithdrawalHistories?.adapter = adapter
     }
 
-    private fun showDialogProcess(id: Int, status: String) {
+    private fun sendNotification(id: Int, title: String, body: String) {
+        notificationViewModel.sendNotification(id, title, body)
+            .observe(viewLifecycleOwner) { result ->
+                when (result) {
+                    is Result.Loading -> {}
+
+                    is Result.Success -> {
+                        Log.d("Send Notification to User", result.data?.message.toString())
+                    }
+
+                    is Result.Error -> {}
+                }
+            }
+    }
+
+
+    private fun showDialogProcess(id: Int, userId: Int, status: String) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle("Penarikan Saldo")
             setMessage("Sudah transfer saldo user?")
@@ -96,11 +116,12 @@ class ProcessingWithdrawalFragment : Fragment() {
             }
             setPositiveButton("Ya") { _, _ ->
                 processTransaction(id, status)
+                sendNotification(userId, "Penarikan Saldo", "Penarikan saldo anda selesai diproses")
             }
         }.show()
     }
 
-    private fun showDialogCancel(id: Int, status: String) {
+    private fun showDialogCancel(id: Int, userId: Int, status: String) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle("Penarikan Saldo")
             setMessage("Ingin membatalkan penarikan user?")
@@ -109,6 +130,7 @@ class ProcessingWithdrawalFragment : Fragment() {
             }
             setPositiveButton("Ya") { _, _ ->
                 processTransaction(id, status)
+                sendNotification(userId, "Penarikan Saldo", "Penarikan saldo anda dibatalkan!")
             }
         }.show()
     }
@@ -137,6 +159,11 @@ class ProcessingWithdrawalFragment : Fragment() {
 
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun obtainNotificationViewModel(activity: AppCompatActivity): NotificationViewModel {
+        val factory = ViewModelFactory.getInstance(activity.application)
+        return ViewModelProvider(activity, factory)[NotificationViewModel::class.java]
     }
 
     private fun obtainWithdrawalViewModel(activity: AppCompatActivity): WithdrawalViewModel {

@@ -3,7 +3,6 @@ package com.spana.banksampahspana.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.spana.banksampahspana.data.model.TrashCategory
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItem
 import com.spana.banksampahspana.databinding.TrashCategoryItemBinding
 
@@ -25,6 +24,7 @@ class TrashCategoryAdapter(private val trashCategoryList: ArrayList<TrashCategor
         val trashCategory = trashCategoryList[position]
 
         holder.binding.txtTrashCategoryName.text = trashCategory.name
+        holder.binding.txtTrashCategoryPrice.text = "${trashCategory.price}/kg"
     }
 
     override fun getItemCount(): Int {

@@ -56,13 +56,6 @@ class AdminHomeFragment : Fragment() {
             requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val token = task.result
-                Log.d("AAAAAAAAAAAAAAAAAA", token)
-            }
-        }
-
         authViewModel.getAuthUser().observe(viewLifecycleOwner) { user ->
             binding?.txtAdmin?.text = "Hai, ${user.name}"
         }

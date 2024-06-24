@@ -94,13 +94,19 @@ class UsersFragment : Fragment() {
     private fun deleteUser(id: Int) {
         authViewModel.deleteUser(id).observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Result.Loading -> {}
+                is Result.Loading -> {
+                    showLoading(true)
+                }
 
                 is Result.Success -> {
+                    showLoading(false)
                     showToast("Berhasil menghapus user dengan id $id")
                 }
 
-                is Result.Error -> {}
+                is Result.Error -> {
+                    showLoading(false)
+                    showToast(result.error)
+                }
             }
         }
     }
