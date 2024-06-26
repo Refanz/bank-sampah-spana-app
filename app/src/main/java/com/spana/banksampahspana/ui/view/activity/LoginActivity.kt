@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isVisible: Boolean) {
-        binding?.loginProgressBar?.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding?.loginProgressBar?.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): AuthViewModel {

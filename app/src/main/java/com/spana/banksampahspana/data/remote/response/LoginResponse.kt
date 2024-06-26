@@ -19,3 +19,11 @@ data class LoginResponse(
     @field:SerializedName("status")
     val status: String
 )
+
+data class LoginErrorResponse(
+    @field: SerializedName("status")
+    val status: String,
+
+    @field:SerializedName("message")
+    val message: String
+)

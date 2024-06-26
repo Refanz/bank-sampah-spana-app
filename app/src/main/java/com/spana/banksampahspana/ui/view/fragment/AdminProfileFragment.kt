@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.spana.banksampahspana.data.Result
+import com.spana.banksampahspana.data.model.Admin
 import com.spana.banksampahspana.databinding.FragmentAdminProfileBinding
+import com.spana.banksampahspana.ui.view.activity.ChangePasswordActivity
 import com.spana.banksampahspana.ui.view.activity.WelcomeActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
@@ -45,8 +47,17 @@ class AdminProfileFragment : Fragment() {
         binding?.btnLogout?.setOnClickListener {
             showDialogLogout()
         }
-    }
 
+        binding?.btnSaveEditProfile?.setOnClickListener {
+            updateAdminProfile()
+        }
+
+        binding?.btnChangePassword?.setOnClickListener {
+            val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
+            intent.putExtra(ACTIVITY_EXTRA, "admin")
+            startActivity(intent)
+        }
+    }
 
     private fun setProfile() {
         authViewModel.getAdminInfo().observe(viewLifecycleOwner) { result ->
@@ -73,6 +84,61 @@ class AdminProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateAdminProfile() {
+        val name = binding?.inputProfileName?.text.toString()
+        val email = binding?.inputProfileEmail?.text.toString()
+        val nip = binding?.inputProfileNip?.text.toString()
+        val gender = binding?.inputProfileGender?.text.toString()
+        val phone = binding?.inputProfilePhone?.text.toString()
+
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle("Update Admin Info")
+            setMessage("Anda ingin mengubah data?")
+            setNegativeButton("Tidak") { dialog, _ ->
+                dialog.dismiss()
+            }
+            setPositiveButton("Ya") { _, _ ->
+
+                val admin = Admin(gender, phone, nip, name, email)
+
+                authViewModel.updateAdminInfo(admin).observe(viewLifecycleOwner) { result ->
+                    when (result) {
+                        is Result.Loading -> {
+                            showLoading(true)
+                        }
+
+                        is Result.Success -> {
+                            authViewModel.adminLogout().observe(viewLifecycleOwner) { logout ->
+                                when (logout) {
+                                    is Result.Loading -> {}
+
+                                    is Result.Success -> {
+                                        showLoading(false)
+
+                                        val intent =
+                                            Intent(requireActivity(), WelcomeActivity::class.java)
+                                        startActivity(intent)
+
+                                        requireActivity().finish()
+                                    }
+
+                                    is Result.Error -> {
+                                        showLoading(false)
+                                    }
+                                }
+                            }
+                        }
+
+                        is Result.Error -> {
+                            showLoading(false)
+                        }
+                    }
+                }
+            }
+
+        }.show()
     }
 
     private fun initGenderComboBox() {
@@ -113,8 +179,6 @@ class AdminProfileFragment : Fragment() {
                         is Result.Error -> {}
                     }
                 }
-
-
             }
 
         }.show()
@@ -128,5 +192,9 @@ class AdminProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val ACTIVITY_EXTRA = "activity_extra"
     }
 }

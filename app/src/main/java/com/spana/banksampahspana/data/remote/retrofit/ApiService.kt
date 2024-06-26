@@ -1,6 +1,7 @@
 package com.spana.banksampahspana.data.remote.retrofit
 
 import com.spana.banksampahspana.data.remote.response.AdminResponse
+import com.spana.banksampahspana.data.remote.response.ChangePasswordResponse
 import com.spana.banksampahspana.data.remote.response.DeleteUserResponse
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
@@ -12,6 +13,7 @@ import com.spana.banksampahspana.data.remote.response.TrashCategoryActionRespons
 import com.spana.banksampahspana.data.remote.response.TrashCategoryItemResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryResponse
 import com.spana.banksampahspana.data.remote.response.TrashResponse
+import com.spana.banksampahspana.data.remote.response.UpdateAdminInfoResponse
 import com.spana.banksampahspana.data.remote.response.UpdateUserInfoResponse
 import com.spana.banksampahspana.data.remote.response.UpdateWithdrawalAdminResponse
 import com.spana.banksampahspana.data.remote.response.UserResponse
@@ -39,6 +41,19 @@ interface ApiService {
     @Headers("Accept: application/json")
     @GET("admin")
     suspend fun getAdminInfo(@Header("Authorization") authorization: String): Response<AdminResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin")
+
+    suspend fun updateAdminInfo(
+        @Header("Authorization") authorization: String,
+        @Field("name") name: String,
+        @Field("email") email: String,
+        @Field("nip") nip: String,
+        @Field("gender") gender: String,
+        @Field("phone") phone: String
+    ): Response<UpdateAdminInfoResponse>
 
     @Headers("Accept: application/json")
     @GET("admin/users")
@@ -145,6 +160,15 @@ interface ApiService {
         @Field("payment_method") paymentMethod: String,
         @Field("phone") phone: String
     ): Response<UpdateUserInfoResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("change-password")
+    suspend fun changePassword(
+        @Header("Authorization") authorization: String,
+        @Field("current_password") currentPassword: String,
+        @Field("new_password") newPassword: String
+    ): Response<ChangePasswordResponse>
 
     /* Trash Categories */
     @GET("trash-categories")

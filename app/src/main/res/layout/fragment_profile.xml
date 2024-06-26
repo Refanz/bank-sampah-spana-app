@@ -74,7 +74,6 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout_profile_gender"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -158,6 +157,17 @@
             app:layout_constraintTop_toBottomOf="@id/input_layout_profile_payment" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button1"
+            android:text="Ganti Password"
+            app:layout_constraintTop_toBottomOf="@id/btn_save_edit_profile" />
+
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,7 +175,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button1"
             android:text="Logout"
-            app:layout_constraintTop_toBottomOf="@id/btn_save_edit_profile" />
+            app:layout_constraintTop_toBottomOf="@id/btn_change_password" />
 
         <ProgressBar
             android:id="@+id/progress_bar_profile"

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.spana.banksampahspana.data.local.AuthPreferences
+import com.spana.banksampahspana.data.model.Admin
 import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.data.repository.AuthRepository
 
@@ -37,4 +38,9 @@ class AuthViewModel(
     fun downloadUserWithdrawalHistories() = authRepository.downloadUserWithdrawalHistories()
 
     fun deleteUser(id: Int) = authRepository.deleteUser(id)
+
+    fun updateAdminInfo(admin: Admin) = authRepository.updateAdminInfo(admin)
+
+    fun changePassword(currentPassword: String, newPassword: String) =
+        authRepository.changePassword(currentPassword, newPassword)
 }

@@ -14,6 +14,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.databinding.FragmentProfileBinding
+import com.spana.banksampahspana.ui.view.activity.ChangePasswordActivity
 import com.spana.banksampahspana.ui.view.activity.WelcomeActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
@@ -51,6 +52,12 @@ class ProfileFragment : Fragment() {
 
         binding?.btnSaveEditProfile?.setOnClickListener {
             updateUserInfo()
+        }
+
+        binding?.btnChangePassword?.setOnClickListener {
+            val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
+            intent.putExtra(ACTIVITY_EXTRA, "user")
+            startActivity(intent)
         }
     }
 
@@ -144,8 +151,6 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-
-
             }
 
         }.show()
@@ -211,5 +216,9 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val ACTIVITY_EXTRA = "activity_extra"
     }
 }
