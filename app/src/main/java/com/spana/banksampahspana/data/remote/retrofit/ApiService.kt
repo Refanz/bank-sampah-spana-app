@@ -3,10 +3,12 @@ package com.spana.banksampahspana.data.remote.retrofit
 import com.spana.banksampahspana.data.remote.response.AdminResponse
 import com.spana.banksampahspana.data.remote.response.ChangePasswordResponse
 import com.spana.banksampahspana.data.remote.response.DeleteUserResponse
+import com.spana.banksampahspana.data.remote.response.ForgotPasswordResponse
 import com.spana.banksampahspana.data.remote.response.LoginResponse
 import com.spana.banksampahspana.data.remote.response.LogoutResponse
 import com.spana.banksampahspana.data.remote.response.NotificationResponse
 import com.spana.banksampahspana.data.remote.response.RegisterResponse
+import com.spana.banksampahspana.data.remote.response.ResetPasswordResponse
 import com.spana.banksampahspana.data.remote.response.TokenResponse
 import com.spana.banksampahspana.data.remote.response.TotalWithdrawalResponse
 import com.spana.banksampahspana.data.remote.response.TrashCategoryActionResponse
@@ -169,6 +171,24 @@ interface ApiService {
         @Field("current_password") currentPassword: String,
         @Field("new_password") newPassword: String
     ): Response<ChangePasswordResponse>
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("forgot-password")
+    suspend fun forgotPassword(
+        @Field("email") email: String
+    ): Response<ForgotPasswordResponse>
+
+
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @POST("reset-password")
+    suspend fun resetPassword(
+        @Field("token") token: String,
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("password_confirmation") passwordConfirm: String
+    ): Response<ResetPasswordResponse>
 
     /* Trash Categories */
     @GET("trash-categories")

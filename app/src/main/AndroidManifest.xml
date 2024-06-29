@@ -17,6 +17,24 @@
         android:theme="@style/Theme.Spana"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.activity.ResetPasswordActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="api.bank-sampah-spana.com"
+                    android:pathPrefix="/api/reset-password"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.view.activity.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.activity.ChangePasswordActivity"
             android:exported="false" />
         <activity

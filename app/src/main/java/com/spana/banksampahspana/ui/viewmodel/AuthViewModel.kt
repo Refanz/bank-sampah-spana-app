@@ -43,4 +43,9 @@ class AuthViewModel(
 
     fun changePassword(currentPassword: String, newPassword: String) =
         authRepository.changePassword(currentPassword, newPassword)
+
+    fun forgotPassword(email: String) = authRepository.forgotPassword(email)
+
+    fun resetPassword(token: String, email: String, password: String, passwordConfirm: String) =
+        authRepository.resetPassword(token, email, password, passwordConfirm)
 }

@@ -3,11 +3,15 @@ package com.spana.banksampahspana.data.repository
 import android.util.Log
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.data.local.AuthPreferences
 import com.spana.banksampahspana.data.model.Admin
 import com.spana.banksampahspana.data.model.User
+import com.spana.banksampahspana.data.remote.response.ForgotPasswordErrorResponse
+import com.spana.banksampahspana.data.remote.response.ForgotPasswordResponse
 import com.spana.banksampahspana.data.remote.response.LoginErrorResponse
+import com.spana.banksampahspana.data.remote.response.ResetPasswordResponse
 import com.spana.banksampahspana.data.remote.response.Response
 import com.spana.banksampahspana.data.remote.retrofit.ApiService
 import kotlinx.coroutines.flow.first
@@ -313,6 +317,58 @@ class AuthRepository private constructor(
                 emit(Result.Error(changePasswordResponse.errorBody().toString()))
             }
 
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun forgotPassword(email: String) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val forgotPasswordResponse = apiService.forgotPassword(email)
+
+            if (forgotPasswordResponse.isSuccessful) {
+                emit(Result.Success(forgotPasswordResponse.body()?.status))
+            } else {
+                val error =
+                    JsonParser().parse(forgotPasswordResponse.errorBody()?.string()).asJsonObject
+
+                if (error.has("status")) {
+                    val errorMessage = Gson().fromJson(
+                        error,
+                        ForgotPasswordResponse::class.java
+                    )
+                    emit(Result.Error(errorMessage.status))
+                } else if (error.has("message")) {
+                    val errorMessage = Gson().fromJson(
+                        error,
+                        ForgotPasswordErrorResponse::class.java
+                    )
+                    emit(Result.Error(errorMessage.message))
+                }
+            }
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
+    fun resetPassword(token: String, email: String, password: String, passwordConfirm: String) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val resetPasswordResponse = apiService.resetPassword(token, email, password, passwordConfirm)
+
+            if (resetPasswordResponse.isSuccessful) {
+                emit(Result.Success(resetPasswordResponse.body()?.status))
+            } else {
+                val error = Gson().fromJson(
+                    resetPasswordResponse.errorBody()?.string(),
+                    ResetPasswordResponse::class.java
+                )
+                emit(Result.Error(error.status))
+            }
         } catch (e: HttpException) {
             emit(Result.Error(e.message()))
         }
