@@ -29,3 +29,8 @@ data class ResetPasswordResponse(
     @field:SerializedName("status")
     val status: String
 )
+
+data class ResetPasswordErrorResponse(
+    @field:SerializedName("message")
+    val message: String
+)

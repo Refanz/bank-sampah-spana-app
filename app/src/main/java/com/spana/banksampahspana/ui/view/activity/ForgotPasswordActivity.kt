@@ -54,8 +54,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                                 dialog.dismiss()
                             }
                         }.show()
-
-
                     }
 
                     is Result.Error -> {
@@ -64,7 +62,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
     }
 

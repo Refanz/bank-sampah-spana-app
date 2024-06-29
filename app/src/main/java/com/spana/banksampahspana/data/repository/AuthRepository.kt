@@ -11,6 +11,7 @@ import com.spana.banksampahspana.data.model.User
 import com.spana.banksampahspana.data.remote.response.ForgotPasswordErrorResponse
 import com.spana.banksampahspana.data.remote.response.ForgotPasswordResponse
 import com.spana.banksampahspana.data.remote.response.LoginErrorResponse
+import com.spana.banksampahspana.data.remote.response.ResetPasswordErrorResponse
 import com.spana.banksampahspana.data.remote.response.ResetPasswordResponse
 import com.spana.banksampahspana.data.remote.response.Response
 import com.spana.banksampahspana.data.remote.retrofit.ApiService
@@ -354,25 +355,40 @@ class AuthRepository private constructor(
         }
     }
 
-    fun resetPassword(token: String, email: String, password: String, passwordConfirm: String) = liveData {
-        emit(Result.Loading)
+    fun resetPassword(token: String, email: String, password: String, passwordConfirm: String) =
+        liveData {
+            emit(Result.Loading)
 
-        try {
-            val resetPasswordResponse = apiService.resetPassword(token, email, password, passwordConfirm)
+            try {
+                val resetPasswordResponse =
+                    apiService.resetPassword(token, email, password, passwordConfirm)
 
-            if (resetPasswordResponse.isSuccessful) {
-                emit(Result.Success(resetPasswordResponse.body()?.status))
-            } else {
-                val error = Gson().fromJson(
-                    resetPasswordResponse.errorBody()?.string(),
-                    ResetPasswordResponse::class.java
-                )
-                emit(Result.Error(error.status))
+                if (resetPasswordResponse.isSuccessful) {
+                    emit(Result.Success(resetPasswordResponse.body()?.status))
+                } else {
+                    val error =
+                        JsonParser().parse(
+                            resetPasswordResponse.errorBody()?.string()
+                        ).asJsonObject
+
+                    if (error.has("status")) {
+                        val errorMessage = Gson().fromJson(
+                            error,
+                            ResetPasswordResponse::class.java
+                        )
+                        emit(Result.Error(errorMessage.status))
+                    } else if (error.has("message")) {
+                        val errorMessage = Gson().fromJson(
+                            error,
+                            ResetPasswordErrorResponse::class.java
+                        )
+                        emit(Result.Error(errorMessage.message))
+                    }
+                }
+            } catch (e: HttpException) {
+                emit(Result.Error(e.message()))
             }
-        } catch (e: HttpException) {
-            emit(Result.Error(e.message()))
         }
-    }
 
     companion object {
         private const val TAG = "AuthRepository"
