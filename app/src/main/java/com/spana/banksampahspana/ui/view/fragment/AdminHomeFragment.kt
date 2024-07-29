@@ -104,7 +104,7 @@ class AdminHomeFragment : Fragment() {
         )
 
         downloadDialog.btnDownloadAll.setOnClickListener {
-            downloadWithdrawalHistories()
+            downloadWithdrawalHistories(downloadDialog)
         }
 
         downloadDialog.btnDownloadByMonth.setOnClickListener {
@@ -126,7 +126,7 @@ class AdminHomeFragment : Fragment() {
                 }
             }
 
-            downloadTransactionHistoryByMonth(month)
+            downloadTransactionHistoryByMonth(downloadDialog, month)
         }
 
         MaterialAlertDialogBuilder(requireContext()).apply {
@@ -139,43 +139,46 @@ class AdminHomeFragment : Fragment() {
         }.show()
     }
 
-    private fun downloadTransactionHistoryByMonth(month: Int) {
+    private fun downloadTransactionHistoryByMonth(
+        downloadDialog: TransanctionDownloadDilalogBinding,
+        month: Int
+    ) {
         authViewModel.downloadUserTransactionsByMonth(month).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
-                    showLoading(true)
+                    showLoading(downloadDialog, true)
                 }
 
                 is Result.Success -> {
                     val file = saveFile(result.data)
-                    showLoading(false)
+                    showLoading(downloadDialog, false)
                     showToast("Laporan diunduh: ${file.absolutePath}")
                 }
 
                 is Result.Error -> {
                     showToast(result.error)
-                    showLoading(false)
+                    showLoading(downloadDialog, false)
                 }
             }
         }
     }
 
-    private fun downloadWithdrawalHistories() {
+    private fun downloadWithdrawalHistories(downloadDialog: TransanctionDownloadDilalogBinding) {
         authViewModel.downloadUserWithdrawalHistories().observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Result.Loading -> {
-                    showLoading(true)
+                    showLoading(downloadDialog, true)
                 }
 
                 is Result.Success -> {
                     val file = saveFile(result.data)
-                    showLoading(false)
+                    showLoading(downloadDialog, false)
                     showToast("Laporan diunduh: ${file.absolutePath}")
                 }
 
                 is Result.Error -> {
                     showToast(result.error)
-                    showLoading(false)
+                    showLoading(downloadDialog, false)
                 }
             }
         }
@@ -189,10 +192,10 @@ class AdminHomeFragment : Fragment() {
         ).show()
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        val downloadDialog =
-            TransanctionDownloadDilalogBinding.inflate(LayoutInflater.from(requireContext()))
-
+    private fun showLoading(
+        downloadDialog: TransanctionDownloadDilalogBinding,
+        isLoading: Boolean
+    ) {
         downloadDialog.progressBarDownload.visibility =
             if (isLoading) View.VISIBLE else View.INVISIBLE
     }
