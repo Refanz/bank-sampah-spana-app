@@ -101,7 +101,13 @@ class AdminProfileFragment : Fragment() {
             }
             setPositiveButton("Ya") { _, _ ->
 
-                val admin = Admin(gender, phone, nip, name, email)
+                val admin = Admin(
+                    gender = gender,
+                    phone = phone,
+                    nip = nip,
+                    name = name,
+                    email = email,
+                )
 
                 authViewModel.updateAdminInfo(admin).observe(viewLifecycleOwner) { result ->
                     when (result) {

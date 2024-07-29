@@ -17,6 +17,8 @@ class AuthViewModel(
 
     fun register(user: User) = authRepository.register(user)
 
+    fun registerAdmin(admin: Admin) = authRepository.registerAdmin(admin)
+
     fun userLogout() = authRepository.userLogout()
 
     fun getUserInfo() = authRepository.getUserInfo()

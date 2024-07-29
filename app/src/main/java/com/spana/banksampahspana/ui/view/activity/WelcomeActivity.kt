@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.spana.banksampahspana.databinding.ActivityWelcomeBinding
+import com.spana.banksampahspana.databinding.RegisterDialogViewBinding
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
 import com.spana.banksampahspana.ui.viewmodel.ViewModelFactory
 
@@ -49,14 +51,36 @@ class WelcomeActivity : AppCompatActivity() {
         }
 
         binding?.btnMenuRegister?.setOnClickListener {
-            val intent = Intent(this@WelcomeActivity, RegisterActivity::class.java)
-            startActivity(intent)
+            showRegisterDialog()
         }
     }
 
     private fun initBinding() {
         _binding = ActivityWelcomeBinding.inflate(LayoutInflater.from(this))
         setContentView(binding?.root)
+    }
+
+    private fun showRegisterDialog() {
+        val registerView = RegisterDialogViewBinding.inflate(LayoutInflater.from(this))
+
+        registerView.btnRegisterUser.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        registerView.btnRegisterAdmin.setOnClickListener {
+            val intent = Intent(this, RegisterAdminActivity::class.java)
+            startActivity(intent)
+        }
+
+        MaterialAlertDialogBuilder(this).apply {
+            setView(registerView.root)
+            setTitle("Registrasi")
+            setMessage("Silahkan pilih registrasi akun!")
+            setNegativeButton("Batal") { dialog, _ ->
+                dialog.dismiss()
+            }
+        }.show()
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): AuthViewModel {

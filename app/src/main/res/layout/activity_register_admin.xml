@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="12dp"
     android:scrollbars="none"
-    tools:context=".ui.view.activity.RegisterActivity">
+    tools:context=".ui.view.activity.RegisterAdminActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:id="@+id/txt_regsiter_menu_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Registrasi Akun User"
+            android:text="Registrasi Akun Admin"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,38 +51,19 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_nis"
+            android:id="@+id/input_layout_nip"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="NIS"
+            android:hint="NIP"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/input_layout_fullname">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_nis"
+                android:id="@+id/input_nip"
                 android:inputType="number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_class"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="Kelas"
-            app:endIconMode="clear_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_layout_nis">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/input_class"
-                android:inputType="number"
-                android:text=""
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -96,7 +77,7 @@
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_layout_class">
+            app:layout_constraintTop_toBottomOf="@id/input_layout_nip">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_email"
@@ -179,33 +160,13 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input_layout_payment_method"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:hint="Metode Pembayaran"
-            app:endIconMode="dropdown_menu"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_layout_phone">
-
-            <AutoCompleteTextView
-                android:id="@+id/input_payment_method"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
         <ProgressBar
             android:id="@+id/progress_bar_register"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="20dp"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/input_layout_payment_method"
+            app:layout_constraintTop_toBottomOf="@id/input_layout_phone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/btn_register"/>
@@ -230,7 +191,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_register" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -88,6 +88,35 @@ class AuthRepository private constructor(
         }
     }
 
+    fun registerAdmin(admin: Admin) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val response = apiService.registerAdmin(
+                email = admin.email,
+                password = admin.password,
+                name = admin.name,
+                nip = admin.nip,
+                phone = admin.phone,
+                gender = admin.gender
+            )
+
+            val result = response.body()
+
+            if (response.isSuccessful) {
+                emit(Result.Success(result))
+                Log.d(TAG, result.toString())
+            } else {
+                val error = Gson().fromJson(response.errorBody()?.string(), Response::class.java)
+                emit(Result.Error(error.errors.nis.toString()))
+                Log.d(TAG, error.errors.toString())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, e.message.toString())
+            emit(Result.Error(e.message.toString()))
+        }
+    }
+
     fun getUserInfo() = liveData {
         emit(Result.Loading)
 

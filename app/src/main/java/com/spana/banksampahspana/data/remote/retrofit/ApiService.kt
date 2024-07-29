@@ -46,8 +46,19 @@ interface ApiService {
 
     @FormUrlEncoded
     @Headers("Accept: application/json")
-    @PUT("admin")
+    @POST("admin/register")
+    suspend fun registerAdmin(
+        @Field("email") email: String,
+        @Field("password") password: String,
+        @Field("name") name: String,
+        @Field("nip") nip: String,
+        @Field("gender") gender: String,
+        @Field("phone") phone: String
+    ): Response<RegisterResponse>
 
+    @FormUrlEncoded
+    @Headers("Accept: application/json")
+    @PUT("admin")
     suspend fun updateAdminInfo(
         @Header("Authorization") authorization: String,
         @Field("name") name: String,
