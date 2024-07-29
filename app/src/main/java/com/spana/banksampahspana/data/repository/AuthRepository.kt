@@ -291,6 +291,21 @@ class AuthRepository private constructor(
         }
     }
 
+    fun downloadUserTransactionsByMonth(month: Int) = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = authPreferences.getAuthToken().first()
+            val downloadResponse =
+                apiService.downloadUserTransactionsByMonth("Bearer $token", month)
+
+            emit(Result.Success(downloadResponse))
+
+        } catch (e: HttpException) {
+            emit(Result.Error(e.message()))
+        }
+    }
+
     fun deleteUser(id: Int) = liveData {
         emit(Result.Loading)
 

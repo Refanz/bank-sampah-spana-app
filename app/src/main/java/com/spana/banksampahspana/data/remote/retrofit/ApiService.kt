@@ -80,6 +80,14 @@ interface ApiService {
     @GET("admin/download/transaction")
     suspend fun downloadUserWithdrawalHistories(@Header("Authorization") authorization: String): ResponseBody
 
+    @Streaming
+    @GET("admin/download/transaction/{month}")
+    suspend fun downloadUserTransactionsByMonth(
+        @Header("Authorization") authorization: String,
+        @Path("month") month: Int
+    ): ResponseBody
+
+
     @Headers("Accept: application/json")
     @GET("admin/withdrawal-histories/{status}")
     suspend fun getUserWithdrawalHistoriesByStatus(

@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.spana.banksampahspana.data.Result
 import com.spana.banksampahspana.databinding.FragmentAdminHomeBinding
+import com.spana.banksampahspana.databinding.TransanctionDownloadDilalogBinding
 import com.spana.banksampahspana.ui.view.activity.TrashAddAdminActivity
 import com.spana.banksampahspana.ui.view.activity.TrashCategoryAddActivity
 import com.spana.banksampahspana.ui.viewmodel.AuthViewModel
@@ -81,16 +81,83 @@ class AdminHomeFragment : Fragment() {
     }
 
     private fun showDownloadDialog() {
+        val downloadDialog =
+            TransanctionDownloadDilalogBinding.inflate(LayoutInflater.from(requireContext()))
+
+        val months = arrayOf(
+            "Januari",
+            "Februari",
+            "Maret",
+            "April",
+            "Mei",
+            "Juni",
+            "Juli",
+            "Agustus",
+            "September",
+            "Oktober",
+            "November",
+            "Desember"
+        )
+
+        (downloadDialog.inputLayoutMonth.editText as? MaterialAutoCompleteTextView)?.setSimpleItems(
+            months
+        )
+
+        downloadDialog.btnDownloadAll.setOnClickListener {
+            downloadWithdrawalHistories()
+        }
+
+        downloadDialog.btnDownloadByMonth.setOnClickListener {
+            val month = when (downloadDialog.inputMonth.text.toString()) {
+                "Januari" -> 1
+                "Februari" -> 2
+                "Maret" -> 3
+                "April" -> 4
+                "Mei" -> 5
+                "Juni" -> 6
+                "Juli" -> 7
+                "Agustus" -> 8
+                "September" -> 9
+                "Oktober" -> 10
+                "November" -> 11
+                "Desember" -> 12
+                else -> {
+                    0
+                }
+            }
+
+            downloadTransactionHistoryByMonth(month)
+        }
+
         MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle("Riwayat Penarikan Siswa")
-            setMessage("Mengunduh data penarikan siswa?")
-            setNegativeButton("Tidak") { dialog, _ ->
+            setView(downloadDialog.root)
+            setTitle("Riwayat Transaksi Siswa")
+            setMessage("Mengunduh data transaksi siswa?")
+            setNegativeButton("Batal") { dialog, _ ->
                 dialog.dismiss()
             }
-            setPositiveButton("Ya") { _, _ ->
-                downloadWithdrawalHistories()
-            }
         }.show()
+    }
+
+    private fun downloadTransactionHistoryByMonth(month: Int) {
+        authViewModel.downloadUserTransactionsByMonth(month).observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+
+                is Result.Success -> {
+                    val file = saveFile(result.data)
+                    showLoading(false)
+                    showToast("Laporan diunduh: ${file.absolutePath}")
+                }
+
+                is Result.Error -> {
+                    showToast(result.error)
+                    showLoading(false)
+                }
+            }
+        }
     }
 
     private fun downloadWithdrawalHistories() {
@@ -123,7 +190,11 @@ class AdminHomeFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding?.progressBarHome?.visibility = if (isLoading) View.VISIBLE else View.GONE
+        val downloadDialog =
+            TransanctionDownloadDilalogBinding.inflate(LayoutInflater.from(requireContext()))
+
+        downloadDialog.progressBarDownload.visibility =
+            if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 
     override fun onDestroyView() {

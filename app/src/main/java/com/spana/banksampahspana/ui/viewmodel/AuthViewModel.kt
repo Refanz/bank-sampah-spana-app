@@ -39,6 +39,9 @@ class AuthViewModel(
 
     fun downloadUserWithdrawalHistories() = authRepository.downloadUserWithdrawalHistories()
 
+    fun downloadUserTransactionsByMonth(month: Int) =
+        authRepository.downloadUserTransactionsByMonth(month)
+
     fun deleteUser(id: Int) = authRepository.deleteUser(id)
 
     fun updateAdminInfo(admin: Admin) = authRepository.updateAdminInfo(admin)
